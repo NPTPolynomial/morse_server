@@ -16,10 +16,10 @@ if(isset($conn->connection_error)){
 
 
 if(isset($_GET["lastmessage_number"])){
-    $last_message_num = $_GET["lastmessage_number"]; 
+    $last_message_num = $_GET["lastmessage_number"];
 }else{
-    
-    $last_message_num = 0; 
+
+    $last_message_num = 0;
 }
 
 $sql = "SELECT * FROM board WHERE board_id > '$last_message_num'";
@@ -43,7 +43,7 @@ if($result->num_rows >0){
 
 
 //        $e = array( "board" => array('board_id' =>$board_id, 'message_id' =>$message_id, 'from'=>$from, 'to'=>$to, 'message'=>$message));
-  
+
         //$e[$board_id]["board_id"]=$board_id;
         //$e[$board_id]["message_id"]=$message_id;
 
