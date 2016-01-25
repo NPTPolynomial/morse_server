@@ -6,7 +6,10 @@ $username = "root";
 $password = "root";
 $db = "morse";
 
-//Create connection
+$DEBUG = 0;
+
+
+// Create connection
 
 $conn = new mysqli($servername, $username, $password, $db, $port);
 
@@ -14,55 +17,52 @@ if(isset($conn->connection_error)){
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Gather the variables
 
-if(isset($_GET["lastmessage_number"])){
-    $last_message_num = $_GET["lastmessage_number"]; 
+if(isset($_GET["node"])){
+    $node = $_GET["node"];
 }else{
-    
-    $last_message_num = 0; 
+    $node = 0;
 }
 
-$sql = "SELECT * FROM board WHERE board_id > '$last_message_num'";
 
-$result = $conn->query($sql);
-
-$e = array();
-
-if($result->num_rows >0){
-    while($row = $result->fetch_assoc()){
-  //      echo $row["board_id"].$row["message_id"].$row["from"].$row["to"].$row["message"];
-        $e[]=$row;
-
-        //$board_id = $row["board_id"];
-        //$message_id  = $row["message_id"];
-        //$from  = $row["from"];
-        //$to  = $row["to"];
-        //$message  = $row["message"];
+if($DEBUG) echo "I got node:" . $node;
 
 
+if($node){
+  // Perform the fetch
+  $table_name = "table_" . $node;
+
+  $sql = "SELECT * FROM `$table_name` ORDER BY `id` LIMIT 1";
+
+  $result = mysqli_query($conn, $sql);
+
+  $number_of_rows = mysqli_num_rows($result);
+  if($number_of_rows>0){
+      while($row = mysqli_fetch_array($result)){
+          $id=$row["id"];
+          $instruct=$row["instruct"];
+          $to=$row["to"];
+          $end=$row["end"];
 
 
-//        $e = array( "board" => array('board_id' =>$board_id, 'message_id' =>$message_id, 'from'=>$from, 'to'=>$to, 'message'=>$message));
-  
-        //$e[$board_id]["board_id"]=$board_id;
-        //$e[$board_id]["message_id"]=$message_id;
+          echo "$instruct, $to, $end";
+      }
+  }else{
+    if($DEBUG) echo "Could not find anything in the table";
+    echo "noTableError, 0, 0";
+  }
 
-        //$e[$board_id]["from"]=$from;
-        //$e[$board_id]["to"]=$to;
-        //$e[$board_id]["message"]=$message;
-        //echo json_encode($e);
+  //echo json_encode($e);
+}else{
+  $instruct="inputError";
+  $to="0";
+  $end="0";
 
 
-    }
-
-//echo json_encode($e);
-
+  echo "$instruct, $to, $end";
 
 }
-
-echo "aidan";
-
-
 $conn->close();
 
 ?>

@@ -6,6 +6,8 @@ $username = "root";
 $password = "root";
 $db = "morse";
 
+$DEBUG = 1;
+
 //Create connection
 
 $conn = new mysqli($servername, $username, $password, $db, $port);
@@ -16,16 +18,66 @@ if(isset($conn->connection_error)){
 
 
 
+// check if all parameters are present
+if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['instruct'])){
+	$from = $_GET['from'];
+  $to = $_GET['to'];
+  $instruct = $_GET['instruct'];
 
-if(isset($_GET['send'])){
-	$new_message =$_GET['send']; 
-	
-	$sql = "UPDATE ran SET message = '$new_message' WHERE ran_id = 1";
-	
-	$result = $conn->query($sql);
+  if(isset($_GET['end'])){
+    $end = $_GET['end'];
+  }else{
+    $end = 0;
+  }
+
+  // get the right table to insert into
+  $table_name = "table_" . $to;
+
+	$sql = "INSERT INTO `$table_name` (`to`, `instruct`, `end`) VALUES ('$from', '$instruct', '$end'); ";
+	$result = mysqli_query($conn, $sql);
+
+
+    if(mysqli_error($conn)){
+      if($DEBUG) echo "mySQL error" . ": " . mysqli_error($conn). "\n";
+    }
+    if($result){
+      if($DEBUG) echo "Successfully inserted";
+
+      // remove the last instruction that you did previously.
+      $table_from_name = "table_" . $from;
+      $sql_delete_top = mysqli_query($conn, "DELETE FROM `$table_from_name` ORDER BY `id` LIMIT 1");
+      if($sql_delete_top){
+        if($DEBUG) echo "Successfully Deleted Previous instruction";
+        echo "OK";
+
+        // insert into board
+        $sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`from`, `to`, `message`) VALUES ('$from', '$to', '$instruct')");
+        if($sql_insert_into_board){
+          if($DEBUG) echo "Successfully ADDED TO BOARD";
+        }else{
+          if($DEBUG) echo "FAILED TO ADD TO BOARD";
+        }
+
+
+
+
+
+
+      }else{
+        if($DEBUG) echo "Failed to Deleted Previous instruction";
+      }
+
+
+    }else{
+      if($DEBUG) echo "Failed inserted";
+    }
+
+
+}else{
+  if($DEBUG) echo "Missing parameters";
 
 }
 
-
+$conn->close();
 
 ?>
