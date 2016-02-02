@@ -19,10 +19,11 @@ if(isset($conn->connection_error)){
 
 
 // check if all parameters are present
-if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['instruct'])){
+if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['instruct']) && isset($_GET['dial_id'])){
 	$from = $_GET['from'];
   $to = $_GET['to'];
   $instruct = $_GET['instruct'];
+  $dial_id = $_GET['dial_id'];
 
   if(isset($_GET['end'])){
     $end = $_GET['end'];
@@ -33,7 +34,7 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['instruct'])){
   // get the right table to insert into
   $table_name = "table_" . $to;
 
-	$sql = "INSERT INTO `$table_name` (`to`, `instruct`, `end`) VALUES ('$from', '$instruct', '$end'); ";
+	$sql = "INSERT INTO `$table_name` (`to`, `instruct`, `end`, `dial_id`) VALUES ('$from', '$instruct', '$end', '$dial_id'); ";
 	$result = mysqli_query($conn, $sql);
 
 
@@ -51,7 +52,7 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['instruct'])){
         echo "OK";
 
         // insert into board
-        $sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`from`, `to`, `message`) VALUES ('$from', '$to', '$instruct')");
+        $sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`from`, `to`, `message`, `dial_id`) VALUES ('$from', '$to', '$instruct', '$dial_id')");
         if($sql_insert_into_board){
           if($DEBUG) echo "Successfully ADDED TO BOARD";
         }else{
