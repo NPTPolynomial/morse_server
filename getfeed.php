@@ -22,7 +22,7 @@ if(isset($_GET["lastmessage_number"])){
     $last_message_num = 0;
 }
 
-$sql = "SELECT * FROM board WHERE board_id > '$last_message_num'";
+$sql = "SELECT * FROM board LEFT JOIN dialog ON board.dial_id = dialog.dial_id WHERE board_id > '$last_message_num'";
 
 $result = $conn->query($sql);
 

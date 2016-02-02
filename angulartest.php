@@ -24,6 +24,7 @@ table tr:nth-child(even) {
     <td>{{ x.from }}</td>
 	<td>{{ x.message }}</td>
 	<td>{{ x.dial_id }}</td>
+	<td>{{ x.dial_message }}</td>
   </tr>
 </table>
 
