@@ -51,7 +51,7 @@ if($node){
       }
   }else{
     if($DEBUG) echo "Could not find anything in the table";
-    echo "noTableError,0,0,0";
+    echo "noRowError,0,0,0";
   }
 
   //echo json_encode($e);
