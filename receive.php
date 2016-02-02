@@ -46,11 +46,11 @@ if($node){
           $end=$row["end"];
 
 
-          echo "$instruct, $to, $end";
+          echo "$instruct,$to,$end";
       }
   }else{
     if($DEBUG) echo "Could not find anything in the table";
-    echo "noTableError, 0, 0";
+    echo "noTableError,0,0";
   }
 
   //echo json_encode($e);
@@ -60,7 +60,7 @@ if($node){
   $end="0";
 
 
-  echo "$instruct, $to, $end";
+  echo "$instruct,$to,$end";
 
 }
 $conn->close();
