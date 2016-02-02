@@ -22,6 +22,8 @@ table tr:nth-child(even) {
   <tr ng-repeat="x in names">
     <td>{{ x.board_id }}</td>
     <td>{{ x.from }}</td>
+	<td>{{ x.message }}</td>
+	<td>{{ x.dial_id }}</td>
   </tr>
 </table>
 
