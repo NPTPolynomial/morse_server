@@ -44,13 +44,14 @@ if($node){
           $instruct=$row["instruct"];
           $to=$row["to"];
           $end=$row["end"];
+		  $count=$row["count"];
 
 
-          echo "$instruct,$to,$end";
+          echo "$instruct,$to,$end,$count";
       }
   }else{
     if($DEBUG) echo "Could not find anything in the table";
-    echo "noTableError,0,0";
+    echo "noTableError,0,0,0";
   }
 
   //echo json_encode($e);
@@ -58,9 +59,10 @@ if($node){
   $instruct="inputError";
   $to="0";
   $end="0";
+  $count="0";
 
 
-  echo "$instruct,$to,$end";
+  echo "$instruct,$to,$end,$count";
 
 }
 $conn->close();
