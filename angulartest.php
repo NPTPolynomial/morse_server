@@ -38,7 +38,7 @@ app.controller('customersCtrl', function($scope, $http, $interval) {
    $interval(function(){
     //$scope.message="This DIV is refreshed "+c+" time.";
     //c++;
-    $http.get("http://localhost/morse_server/getfeed.php")
+    $http.get("getfeed.php")
     .then(function (response) {$scope.names = response.data;});
 
   },10000);
