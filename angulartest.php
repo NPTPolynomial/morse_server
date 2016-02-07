@@ -19,10 +19,18 @@ table tr:nth-child(even) {
 <div ng-app="myApp" ng-controller="customersCtrl">
 
 <table>
+	<th>Board_id</th>
+	<th>from</th>
+	<th>message</th>
+	<th>to</th>
+	<th>dial_id</th>
+	<th>dial_message</th>
+	
   <tr ng-repeat="x in names">
     <td>{{ x.board_id }}</td>
     <td>{{ x.from }}</td>
 	<td>{{ x.message }}</td>
+	<td>{{ x.to }}</td>
 	<td>{{ x.dial_id }}</td>
 	<td>{{ x.dial_message }}</td>
   </tr>
