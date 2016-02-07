@@ -35,43 +35,61 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['instruct']) && iss
 	// get the right table to insert into
 	$table_name = "table_" . $to;
 
-	$sql = "INSERT INTO `$table_name` (`to`, `instruct`, `end`, `dial_id`, `count`) VALUES ('$from', '$instruct', '$end', '$dial_id', '$count'); ";
-	$result = mysqli_query($conn, $sql);
+
+	
 
 
 	if(mysqli_error($conn)){
-	if($DEBUG) echo "mySQL error" . ": " . mysqli_error($conn). "\n";
-	}
-	if($result){
-	if($DEBUG) echo "Successfully inserted";
-
-	// remove the last instruction that you did previously.
-	$table_from_name = "table_" . $from;
-	$sql_delete_top = mysqli_query($conn, "DELETE FROM `$table_from_name` ORDER BY `id` LIMIT 1");
-	if($sql_delete_top){
-	if($DEBUG) echo "Successfully Deleted Previous instruction";
-	echo "OK";
-
-	// insert into board
-	$sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`from`, `to`, `message`, `dial_id`, `count`) VALUES ('$from', '$to', '$instruct', '$dial_id', '$count')");
-	if($sql_insert_into_board){
-	  if($DEBUG) echo "Successfully ADDED TO BOARD";
+		if($DEBUG) echo "mySQL error" . ": " . mysqli_error($conn). "\n";
+	
 	}else{
-	  if($DEBUG) echo "FAILED TO ADD TO BOARD";
-	}
+		
+		
+		
+		// check for duplicated "hello" instructions from the same place.
+		if($instruct == "hello" && $end == "0"){
+			$check_duplicate = mysqli_query($conn, "SELECT * FROM `$table_name` WHERE `instruct` = '$instruct' AND `to` = '$from'");
+			if(mysqli_num_rows($check_duplicate) < 1){
+				$duplicate_entry = false;
+			}else{
+				$duplicate_entry = true;
+			}
+		}
+
+		if(!$duplicate_entry){
+
+			$sql = "INSERT INTO `$table_name` (`to`, `instruct`, `end`, `dial_id`, `count`) VALUES ('$from', '$instruct', '$end', '$dial_id', '$count'); ";
+			$result = mysqli_query($conn, $sql);
+		
+			if($result){
+				if($DEBUG) echo "Successfully inserted";
+
+				// remove the last instruction that you did previously.
+				$table_from_name = "table_" . $from;
+				$sql_delete_top = mysqli_query($conn, "DELETE FROM `$table_from_name` ORDER BY `id` LIMIT 1");
+				if($sql_delete_top){
+					if($DEBUG) echo "Successfully Deleted Previous instruction";
+					echo "OK";
+
+					// insert into board
+					$sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`from`, `to`, `message`, `dial_id`, `count`) VALUES ('$from', '$to', '$instruct', '$dial_id', '$count')");
+					if($sql_insert_into_board){
+					 	if($DEBUG) echo "Successfully ADDED TO BOARD";
+					}else{
+					 	if($DEBUG) echo "FAILED TO ADD TO BOARD";
+					}
+
+				}else{
+					if($DEBUG) echo "Failed to Deleted Previous instruction";
+				}
 
 
-
-
-
-
-	}else{
-	if($DEBUG) echo "Failed to Deleted Previous instruction";
-	}
-
-
-	}else{
-	if($DEBUG) echo "Failed inserted";
+			}else{
+				if($DEBUG) echo "Failed inserted";
+			}
+		}else{
+			if($DEBUG) echo "Duplicate hello entry. Entry dropped.";
+		}
 	}
 
 
