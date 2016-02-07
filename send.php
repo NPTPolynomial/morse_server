@@ -19,10 +19,10 @@ if(isset($conn->connection_error)){
 
 
 // check if all parameters are present
-if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['instruct']) && isset($_GET['dial_id']) && isset($_GET['count'])){
+if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($_GET['dial_id']) && isset($_GET['count'])){
 	$from = $_GET['from'];
 	$to = $_GET['to'];
-	$instruct = $_GET['instruct'];
+	$type = $_GET['type'];
 	$dial_id = $_GET['dial_id'];
 	$count = $_GET['count'];
 
@@ -47,8 +47,8 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['instruct']) && iss
 		
 		
 		// check for duplicated "hello" instructions from the same place.
-		if($instruct == "hello" && $end == "0"){
-			$check_duplicate = mysqli_query($conn, "SELECT * FROM `$table_name` WHERE `instruct` = '$instruct' AND `to` = '$from'");
+		if($type == "hello" && $end == "0"){
+			$check_duplicate = mysqli_query($conn, "SELECT * FROM `$table_name` WHERE `type` = '$type' AND `from` = '$from'");
 			if(mysqli_num_rows($check_duplicate) < 1){
 				$duplicate_entry = false;
 			}else{
@@ -58,7 +58,7 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['instruct']) && iss
 
 		if(!$duplicate_entry){
 
-			$sql = "INSERT INTO `$table_name` (`to`, `instruct`, `end`, `dial_id`, `count`) VALUES ('$from', '$instruct', '$end', '$dial_id', '$count'); ";
+			$sql = "INSERT INTO `$table_name` (`from`, `type`, `end`, `dial_id`, `count`) VALUES ('$from', '$type', '$end', '$dial_id', '$count'); ";
 			$result = mysqli_query($conn, $sql);
 		
 			if($result){
@@ -72,7 +72,7 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['instruct']) && iss
 					echo "OK";
 
 					// insert into board
-					$sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`from`, `to`, `message`, `dial_id`, `count`) VALUES ('$from', '$to', '$instruct', '$dial_id', '$count')");
+					$sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`from`, `to`, `type`, `dial_id`, `count`) VALUES ('$from', '$to', '$type', '$dial_id', '$count')");
 					if($sql_insert_into_board){
 					 	if($DEBUG) echo "Successfully ADDED TO BOARD";
 					}else{

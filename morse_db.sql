@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 02, 2016 at 04:28 AM
+-- Generation Time: Feb 08, 2016 at 12:44 AM
 -- Server version: 5.5.29
 -- PHP Version: 5.4.10
 
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `morse`
 --
-CREATE DATABASE `morse` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `morse`;
 
 -- --------------------------------------------------------
 
@@ -33,7 +31,7 @@ CREATE TABLE `board` (
   `board_id` int(12) NOT NULL AUTO_INCREMENT,
   `from` varchar(10) NOT NULL,
   `to` varchar(10) NOT NULL,
-  `message` text NOT NULL,
+  `type` text NOT NULL,
   `dial_id` varchar(30) NOT NULL DEFAULT '0',
   `count` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`board_id`)
@@ -43,7 +41,7 @@ CREATE TABLE `board` (
 -- Dumping data for table `board`
 --
 
-INSERT INTO `board` (`board_id`, `from`, `to`, `message`, `dial_id`, `count`) VALUES
+INSERT INTO `board` (`board_id`, `from`, `to`, `type`, `dial_id`, `count`) VALUES
 (1, 'a', 'b', 'hello b', '0', 0),
 (2, 'b', 'a', 'hello back a', '0', 0),
 (3, 'c', 'b', 'Hello b, long time no see', '0', 0),
@@ -78,26 +76,6 @@ INSERT INTO `dialog` (`dial_id`, `dial_message`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ran`
---
-
-DROP TABLE IF EXISTS `ran`;
-CREATE TABLE `ran` (
-  `ran_id` int(11) NOT NULL AUTO_INCREMENT,
-  `message` varchar(30) NOT NULL,
-  PRIMARY KEY (`ran_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `ran`
---
-
-INSERT INTO `ran` (`ran_id`, `message`) VALUES
-(1, 'henry');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `table_a`
 --
 
@@ -105,13 +83,13 @@ DROP TABLE IF EXISTS `table_a`;
 CREATE TABLE `table_a` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `instruct` varchar(35) NOT NULL,
-  `to` varchar(10) NOT NULL,
+  `type` varchar(35) NOT NULL,
+  `from` varchar(10) NOT NULL,
   `end` varchar(2) NOT NULL,
   `dial_id` varchar(20) NOT NULL DEFAULT '0',
   `count` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -123,8 +101,8 @@ DROP TABLE IF EXISTS `table_b`;
 CREATE TABLE `table_b` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `instruct` varchar(35) NOT NULL,
-  `to` varchar(10) NOT NULL,
+  `type` varchar(35) NOT NULL,
+  `from` varchar(10) NOT NULL,
   `end` varchar(2) NOT NULL,
   `dial_id` varchar(20) NOT NULL DEFAULT '0',
   `count` int(8) NOT NULL DEFAULT '0',

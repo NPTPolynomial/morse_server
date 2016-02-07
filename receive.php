@@ -41,13 +41,13 @@ if($node){
   if($number_of_rows>0){
       while($row = mysqli_fetch_array($result)){
           $id=$row["id"];
-          $instruct=$row["instruct"];
-          $to=$row["to"];
+          $type=$row["type"];
+          $from=$row["from"];
           $end=$row["end"];
 		  $count=$row["count"];
 
 
-          echo "$instruct,$to,$end,$count";
+          echo "$type,$from,$end,$count";
       }
   }else{
     if($DEBUG) echo "Could not find anything in the table";
@@ -56,13 +56,13 @@ if($node){
 
   //echo json_encode($e);
 }else{
-  $instruct="inputError";
-  $to="0";
+  $type="inputError";
+  $from="0";
   $end="0";
   $count="0";
 
 
-  echo "$instruct,$to,$end,$count";
+  echo "$type,$from,$end,$count";
 
 }
 $conn->close();
