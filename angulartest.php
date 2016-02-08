@@ -52,12 +52,12 @@ table tr:nth-child(even) {
 
 .message_left{
 	width: 500px;
-	height: 100px;
+	height: 90px;
 }
 
 .message_right{
 	width: 500px;
-	height: 100px;
+	height: 90px;
 }
 
 .message_arrow{
@@ -73,11 +73,11 @@ table tr:nth-child(even) {
 	-webkit-border-radius: 0px 77px 77px 77px;
 	-moz-border-radius: 0px 77px 77px 77px;
 	border-radius: 0px 77px 77px 77px;
-	border: 4px solid #FFFF00;
-	background-color:#5FD9D5;
-	-webkit-box-shadow: #B3B3B3 14px 14px 14px;
-	-moz-box-shadow: #B3B3B3 14px 14px 14px;
-	box-shadow: #B3B3B3 14px 14px 14px;
+	border: 4px solid #C4FFFF;
+	background-color:#B0CDD9;
+	-webkit-box-shadow: #B3B3B3 8px 8px 8px;
+	-moz-box-shadow: #B3B3B3 8px 8px 8px;
+	box-shadow: #B3B3B3 8px 8px 8px;
 	
 }
 
@@ -90,11 +90,11 @@ table tr:nth-child(even) {
 	-webkit-border-radius: 77px 0px 77px 77px;
 	-moz-border-radius: 77px 0px 77px 77px;
 	border-radius: 77px 0px 77px 77px;
-	border: 4px solid #FFFF00;
+	border: 4px solid #C4FFFF;
 	background-color:#5FD9D5;
-	-webkit-box-shadow: #B3B3B3 14px 14px 14px;
-	-moz-box-shadow: #B3B3B3 14px 14px 14px;
-	box-shadow: #B3B3B3 14px 14px 14px;
+	-webkit-box-shadow: #B3B3B3 8px 8px 8px;
+	-moz-box-shadow: #B3B3B3 8px 8px 8px;
+	box-shadow: #B3B3B3 8px 8px 8px;
 	
 }
 
