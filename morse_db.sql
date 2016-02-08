@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 08, 2016 at 01:00 AM
+-- Generation Time: Feb 08, 2016 at 05:39 AM
 -- Server version: 5.5.29
 -- PHP Version: 5.4.10
 
@@ -33,6 +33,7 @@ CREATE TABLE `board` (
   `to` varchar(10) NOT NULL,
   `type` text NOT NULL,
   `dial_id` varchar(30) NOT NULL DEFAULT '0',
+  `end` varchar(2) NOT NULL,
   `count` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`board_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
@@ -41,16 +42,16 @@ CREATE TABLE `board` (
 -- Dumping data for table `board`
 --
 
-INSERT INTO `board` (`board_id`, `from`, `to`, `type`, `dial_id`, `count`) VALUES
-(1, 'a', 'b', 'hello b', '0', 0),
-(2, 'b', 'a', 'hello back a', '0', 0),
-(3, 'c', 'b', 'Hello b, long time no see', '0', 0),
-(4, 'a', 'b', 'hello', '0', 0),
-(5, 'a', 'b', 'hello', '0', 0),
-(6, 'b', 'a', 'helolololol', '0', 0),
-(7, 'c', 'd', 'kugvkjhbljhbl', '2200', 0),
-(8, 'a', 'b', 'message', '0', 0),
-(9, 'a', 'b', 'hello', '1', 0);
+INSERT INTO `board` (`board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`) VALUES
+(1, 'a', 'b', 'hello b', '3', '0', 0),
+(2, 'b', 'a', 'hello back a', '2', '0', 0),
+(3, 'c', 'b', 'Hello b, long time no see', '1', '1', 0),
+(4, 'a', 'b', 'hello', '5', '0', 0),
+(5, 'a', 'b', 'hello', '9', '0', 0),
+(6, 'b', 'a', 'helolololol', '10', '0', 0),
+(7, 'c', 'd', 'kugvkjhbljhbl', '14', '1', 0),
+(8, 'a', 'b', 'message', '22', '0', 0),
+(9, 'a', 'b', 'hello', '1', '0', 0);
 
 -- --------------------------------------------------------
 
