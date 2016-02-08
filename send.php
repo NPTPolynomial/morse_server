@@ -72,7 +72,7 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($
 					echo "OK";
 
 					// insert into board
-					$sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`from`, `to`, `type`, `dial_id`, `count`) VALUES ('$from', '$to', '$type', '$dial_id', '$count')");
+					$sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`from`, `to`, `type`, `dial_id`, `end` `count`) VALUES ('$from', '$to', '$type', '$dial_id', '$end', '$count')");
 					if($sql_insert_into_board){
 					 	if($DEBUG) echo "Successfully ADDED TO BOARD";
 					}else{
