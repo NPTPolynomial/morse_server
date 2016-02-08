@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 08, 2016 at 12:44 AM
+-- Generation Time: Feb 08, 2016 at 01:00 AM
 -- Server version: 5.5.29
 -- PHP Version: 5.4.10
 
@@ -60,18 +60,45 @@ INSERT INTO `board` (`board_id`, `from`, `to`, `type`, `dial_id`, `count`) VALUE
 
 DROP TABLE IF EXISTS `dialog`;
 CREATE TABLE `dialog` (
-  `dial_id` varchar(12) NOT NULL,
-  `dial_message` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `dial_id` int(8) NOT NULL AUTO_INCREMENT,
+  `dial_message` varchar(31) DEFAULT NULL,
+  PRIMARY KEY (`dial_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=30 ;
 
 --
 -- Dumping data for table `dialog`
 --
 
 INSERT INTO `dialog` (`dial_id`, `dial_message`) VALUES
-('0', 'Hello!'),
-('1', 'HOW YOU DOING?'),
-('2200', 'Leo is in the way!');
+(1, 'Hello.'),
+(2, 'Hi.'),
+(3, 'Hey.'),
+(4, 'Good morning.'),
+(5, 'Good evening.'),
+(6, 'Long time no see.'),
+(7, 'It has been a while.'),
+(8, 'I feel good today.'),
+(9, 'I don''t like the weather today.'),
+(10, 'I feel like dancing.'),
+(11, 'I like hiking.'),
+(12, 'I like poutine.'),
+(13, 'I like pasta.'),
+(14, 'I come from Canada.'),
+(15, 'I don''t speak French.'),
+(16, 'I was born in Vancouver.'),
+(17, 'Nice meeting you.'),
+(18, 'My name is cup.'),
+(19, 'I don''t feel well.'),
+(20, 'I studied design.'),
+(21, 'I like being carried around.'),
+(22, 'It smells funny in here.'),
+(23, 'Bye.'),
+(24, 'Goodbye.'),
+(25, 'See you.'),
+(26, 'Cheers.'),
+(27, 'Good talking to you.'),
+(28, 'Farewell.'),
+(29, 'See ya!');
 
 -- --------------------------------------------------------
 
