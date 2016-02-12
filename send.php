@@ -47,14 +47,14 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($
 		
 		$duplicate_entry = false;
 		// check for duplicated "hello" instructions from the same place.
-		if($type == "hello" && $end == "0"){
-			$check_duplicate = mysqli_query($conn, "SELECT * FROM `$table_name` WHERE `type` = '$type' AND `from` = '$from'");
+//		if($type == "hello" && $end == "0"){
+			$check_duplicate = mysqli_query($conn, "SELECT * FROM `$table_name` WHERE `from` = '$from'");
 			if(mysqli_num_rows($check_duplicate) < 1){
 				$duplicate_entry = false;
 			}else{
 				$duplicate_entry = true;
 			}
-		}
+//		}
 
 		if(!$duplicate_entry){
 
