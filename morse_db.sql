@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 08, 2016 at 05:39 AM
+-- Generation Time: Feb 12, 2016 at 03:22 AM
 -- Server version: 5.5.29
 -- PHP Version: 5.4.10
 
@@ -28,6 +28,7 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `board`;
 CREATE TABLE `board` (
+  `datetime` datetime NOT NULL,
   `board_id` int(12) NOT NULL AUTO_INCREMENT,
   `from` varchar(10) NOT NULL,
   `to` varchar(10) NOT NULL,
@@ -36,22 +37,20 @@ CREATE TABLE `board` (
   `end` varchar(2) NOT NULL,
   `count` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`board_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `board`
 --
 
-INSERT INTO `board` (`board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`) VALUES
-(1, 'a', 'b', 'hello b', '3', '0', 0),
-(2, 'b', 'a', 'hello back a', '2', '0', 0),
-(3, 'c', 'b', 'Hello b, long time no see', '1', '1', 0),
-(4, 'a', 'b', 'hello', '5', '0', 0),
-(5, 'a', 'b', 'hello', '9', '0', 0),
-(6, 'b', 'a', 'helolololol', '10', '0', 0),
-(7, 'c', 'd', 'kugvkjhbljhbl', '14', '1', 0),
-(8, 'a', 'b', 'message', '22', '0', 0),
-(9, 'a', 'b', 'hello', '1', '0', 0);
+INSERT INTO `board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`) VALUES
+('2016-02-12 00:07:40', 4, 'a', 'b', 'message', '2', '0', 1),
+('2016-02-12 00:30:23', 5, 'a', 'b', 'message', '2', '0', 1),
+('2016-02-12 00:49:24', 6, 'a', 'b', 'message', '2', '0', 1),
+('2016-02-12 02:05:59', 7, 'a', 'b', 'hello', '2', '0', 1),
+('2016-02-12 02:06:20', 8, 'a', 'b', 'bye', '2', '0', 1),
+('2016-02-12 02:07:28', 9, 'a', 'b', 'bye', '2', '0', 1),
+('2016-02-12 02:11:35', 10, 'a', 'b', 'bye', '23', '1', 1);
 
 -- --------------------------------------------------------
 
@@ -62,44 +61,64 @@ INSERT INTO `board` (`board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`
 DROP TABLE IF EXISTS `dialog`;
 CREATE TABLE `dialog` (
   `dial_id` int(8) NOT NULL AUTO_INCREMENT,
-  `dial_message` varchar(31) DEFAULT NULL,
+  `dial_message` varchar(26) DEFAULT NULL,
   PRIMARY KEY (`dial_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50 ;
 
 --
 -- Dumping data for table `dialog`
 --
 
 INSERT INTO `dialog` (`dial_id`, `dial_message`) VALUES
-(1, 'Hello.'),
-(2, 'Hi.'),
-(3, 'Hey.'),
-(4, 'Good morning.'),
-(5, 'Good evening.'),
-(6, 'Long time no see.'),
-(7, 'It has been a while.'),
-(8, 'I feel good today.'),
-(9, 'I don''t like the weather today.'),
-(10, 'I feel like dancing.'),
-(11, 'I like hiking.'),
-(12, 'I like poutine.'),
-(13, 'I like pasta.'),
-(14, 'I come from Canada.'),
-(15, 'I don''t speak French.'),
-(16, 'I was born in Vancouver.'),
-(17, 'Nice meeting you.'),
-(18, 'My name is cup.'),
-(19, 'I don''t feel well.'),
-(20, 'I studied design.'),
-(21, 'I like being carried around.'),
-(22, 'It smells funny in here.'),
-(23, 'Bye.'),
-(24, 'Goodbye.'),
-(25, 'See you.'),
-(26, 'Cheers.'),
-(27, 'Good talking to you.'),
-(28, 'Farewell.'),
-(29, 'See ya!');
+(1, 'Good morning'),
+(2, 'Good evening'),
+(3, 'Good afternoon'),
+(4, 'Hello'),
+(5, 'Hi'),
+(6, 'Hey'),
+(7, 'Long time no see'),
+(8, 'It has been a while'),
+(9, 'I come from Canada'),
+(10, 'It is going to rain'),
+(11, 'I like poutine'),
+(12, 'I like hiking'),
+(13, 'I don''t like the weather'),
+(14, 'I don''t speak French'),
+(15, 'I was born in Vancouver'),
+(16, 'My name is Bob'),
+(17, 'I studied design'),
+(18, 'It smells funny in here'),
+(19, 'I feel good today'),
+(20, 'I am sleepy'),
+(21, 'It is nice'),
+(22, 'You are funny'),
+(23, 'It is hot'),
+(24, 'I''m thirsty'),
+(25, 'I like being carried'),
+(26, 'I want to be 1 inch taller'),
+(27, 'I don''t feel well'),
+(28, 'I am turning 2 soon'),
+(29, 'I don''t understand a word'),
+(30, 'I feel like dancing'),
+(31, 'I want a shower'),
+(32, 'I am relaxed'),
+(33, 'We should talk more'),
+(34, 'Interesting'),
+(35, 'I don''t care'),
+(36, 'I was custom made'),
+(37, 'I miss home'),
+(38, 'I miss my family'),
+(39, 'I feel naked'),
+(40, 'I like you'),
+(41, 'Farewell'),
+(42, 'Goodbye'),
+(43, 'Good night'),
+(44, 'Bye'),
+(45, 'Take care'),
+(46, 'Good talking to you'),
+(47, 'See you'),
+(48, 'Cheers'),
+(49, 'See ya');
 
 -- --------------------------------------------------------
 
@@ -135,7 +154,27 @@ CREATE TABLE `table_b` (
   `dial_id` varchar(20) NOT NULL DEFAULT '0',
   `count` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+
+--
+-- Dumping data for table `table_b`
+--
+
+INSERT INTO `table_b` (`date`, `id`, `type`, `from`, `end`, `dial_id`, `count`) VALUES
+('2016-02-11 23:54:08', 1, 'message', 'a', '0', '2', 1),
+('2016-02-11 23:55:34', 2, 'message', 'a', '0', '2', 1),
+('2016-02-11 23:56:34', 3, 'message', 'a', '0', '2', 1),
+('2016-02-11 23:58:20', 4, 'message', 'a', '0', '2', 1),
+('2016-02-11 23:59:09', 5, 'message', 'a', '0', '2', 1),
+('2016-02-11 23:59:56', 6, 'message', 'a', '0', '2', 1),
+('2016-02-12 00:06:08', 7, 'message', 'a', '0', '2', 1),
+('2016-02-12 00:06:54', 8, 'message', 'a', '0', '2', 1),
+('2016-02-12 00:07:40', 9, 'message', 'a', '0', '2', 1),
+('2016-02-12 00:30:23', 10, 'message', 'a', '0', '2', 1),
+('2016-02-12 00:49:24', 11, 'message', 'a', '0', '2', 1),
+('2016-02-12 02:05:59', 12, 'hello', 'a', '0', '2', 1),
+('2016-02-12 02:06:20', 13, 'bye', 'a', '0', '2', 1),
+('2016-02-12 02:07:28', 14, 'bye', 'a', '0', '2', 1);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
