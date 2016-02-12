@@ -8,6 +8,7 @@ $password = "root";
 $db = "morse";
 
 $DEBUG = 1;
+$errors = 0;
 
 //Create connection
 
@@ -17,7 +18,7 @@ if(isset($conn->connection_error)){
     die("Connection failed: " . $conn->connect_error);
 }
 
-$tables_to_drop = ("board","table_a", "table_b");
+$tables_to_drop = array("board", "table_a", "table_b");
 
 foreach($tables_to_drop as $table){
 	$query = "TRUNCATE TABLE " . $table;
