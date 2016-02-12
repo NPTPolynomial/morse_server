@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -109,6 +112,7 @@ table tr:nth-child(even) {
 <div class="board_display" ng-app="myApp" ng-controller="customersCtrl">
 
 <table>
+	<th>Date Time</th>
 	<th>Board_id</th>
 	<th>From</th>
 	<th>Message Type</th>
@@ -122,6 +126,7 @@ table tr:nth-child(even) {
 	</tr>
 	
 	<tr ng-repeat="x in names">
+		<td>{{ x.datetime }}</td>
 		<td>{{ x.board_id }}</td>
 		<td>{{ x.from }}</td>
 		<td>{{ x.type }}</td>
@@ -148,7 +153,7 @@ table tr:nth-child(even) {
 			</div>
 			
 				<div class="message_body_left">
-		
+					<td>{{ x.datetime }}</td>
 					<td>{{ x.board_id }}</td>
 					<b>{{ x.from }}:</b>
 					<!--<td>{{ x.type }}</td>
@@ -174,7 +179,7 @@ table tr:nth-child(even) {
 			</div>
 			
 				<div class="message_body_right">
-		
+					<td>{{ x.datetime }}</td>
 					<td>{{ x.board_id }}</td>
 					<b>{{ x.from }}:</b>
 					<!--<td>{{ x.type }}</td>

@@ -45,7 +45,7 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($
 	}else{
 		
 		
-		
+		$duplicate_entry = false;
 		// check for duplicated "hello" instructions from the same place.
 		if($type == "hello" && $end == "0"){
 			$check_duplicate = mysqli_query($conn, "SELECT * FROM `$table_name` WHERE `type` = '$type' AND `from` = '$from'");
@@ -72,11 +72,18 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($
 					echo "OK";
 
 					// insert into board
-					$sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`from`, `to`, `type`, `dial_id`, `end` `count`) VALUES ('$from', '$to', '$type', '$dial_id', '$end', '$count')");
+					
+					// get time
+					$utc_str = gmdate("Y-m-d H:i:s", time());
+					$utc = strtotime($utc_str);
+					
+					
+					$sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`) VALUES ('$utc_str', NULL ,'$from', '$to', '$type', '$dial_id', '$end', '$count')");
 					if($sql_insert_into_board){
 					 	if($DEBUG) echo "Successfully ADDED TO BOARD";
 					}else{
 					 	if($DEBUG) echo "FAILED TO ADD TO BOARD";
+						echo $conn->error;
 					}
 
 				}else{
