@@ -58,10 +58,16 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($
 
 		if(!$duplicate_entry){
 
-			$sql = "INSERT INTO `$table_name` (`from`, `type`, `end`, `dial_id`, `count`) VALUES ('$from', '$type', '$end', '$dial_id', '$count'); ";
-			$result = mysqli_query($conn, $sql);
-		
-			if($result){
+			if(!($type == "bye" && $end == "1")){
+				$sql = "INSERT INTO `$table_name` (`from`, `type`, `end`, `dial_id`, `count`) VALUES ('$from', '$type', '$end', '$dial_id', '$count'); ";
+				$result = mysqli_query($conn, $sql);
+				$bye_end_detected = 0;
+			}else{
+				if($DEBUG) echo "Bye End detected. Entry dropped on target. Still inserted in Board.";
+				$bye_end_detected = 1;
+				$result = 0;
+			}
+			if($result || ($bye_end_detected == 1) ){
 				if($DEBUG) echo "Successfully inserted";
 
 				// remove the last instruction that you did previously.
