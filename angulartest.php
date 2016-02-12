@@ -140,6 +140,12 @@ table tr:nth-child(even) {
 	</tr>
 </table>
 
+<br />
+<form action="truncate_all_tables.php" method="POST">
+  <fieldset>
+	<input class="button-primary" type="submit" value="Clear All Tables">
+  </fieldset>
+</form>
 
 
 <div id="bubble_board">
