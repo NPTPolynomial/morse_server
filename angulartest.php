@@ -104,6 +104,9 @@ table tr:nth-child(even) {
 
 </style>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="js/moment.js"></script>
+<script src="js/moment-timezone.js"></script>
+
 
 </head>
 
@@ -122,7 +125,7 @@ table tr:nth-child(even) {
 	<th>Dial_message</th>
 	
 	<tr>
-	<td id="loading_sign" class="loadingImg" colspan="7"><img src="img/hex-loader2.gif"></img></td>
+	<td id="loading_sign" class="loadingImg" colspan="8"><img src="img/hex-loader2.gif"></img></td>
 	</tr>
 	
 	<tr ng-repeat="x in names">
@@ -218,6 +221,16 @@ app.controller('customersCtrl', function($scope, $http, $interval) {
     //c++;
     $http.get("getfeed.php")
     .then(function (response) {$scope.names = response.data;
+
+		$scope.names.forEach(function(name) {
+		    //console.log(name.datetime);
+
+			name.datetime = moment(moment.utc(name.datetime).toDate()).format('YYYY-MM-DD HH:mm:ss');
+			//console.log("New time: " + name.datetime);
+		  });
+			
+			
+			
 	
 		if(($scope.names)){
 			document.getElementById("loading_sign").style.display = 'none';
