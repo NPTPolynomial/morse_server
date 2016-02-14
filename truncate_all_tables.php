@@ -35,8 +35,11 @@ if($errors ==0){
 	/* Redirect browser */
     $redirect_link = "Location: angulartest.php";
 	header($redirect_link);
+	
+	echo "<a href='angulartest.php'>Go to Board</a>";
 	 
 	/* Make sure that code below does not get executed when we redirect. */
+	$conn->close();
 	exit;
 }
 
