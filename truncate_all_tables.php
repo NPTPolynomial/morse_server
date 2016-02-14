@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 
 $servername = "localhost";
 $port = 8889;
