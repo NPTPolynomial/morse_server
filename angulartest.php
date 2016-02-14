@@ -247,7 +247,7 @@ app.controller('customersCtrl', function($scope, $http, $interval) {
 	
 
 
-  },4000);
+  },1000);
 
 
 });
