@@ -85,12 +85,12 @@ void setup() {
 
 void loop() {
   // wait for WiFi connection
-  USE_SERIAL.println(WiFiMulti.run() == WL_CONNECTED);
+//  USE_SERIAL.println(WiFiMulti.run() == WL_CONNECTED);
 
 
 
   if ((WiFiMulti.run() == WL_CONNECTED)
-//  && (abs(millis() - prevMillis)) >= INTERVAL
+  && (abs(millis() - prevMillis)) >= INTERVAL
      ) {
 
 //    for (int i = 0; i < 20; i++) {
@@ -182,13 +182,13 @@ void loop() {
           USE_SERIAL.println(sendReturn);
 
           if (sendReturn != "Duplicate hello entry. Entry dropped." && httpCode2 == 200) {
-            wtv020sd16p.asyncPlayVoice(dial_id - 1);
+            wtv020sd16p.playVoice(dial_id - 1);
           }
 
 
-          USE_SERIAL.println("before sleep");
-          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-          USE_SERIAL.println("after sleep");
+//          USE_SERIAL.println("before sleep");
+//          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
+//          USE_SERIAL.println("after sleep");
 
                       
 
@@ -231,11 +231,11 @@ void loop() {
           String sendReturn = http.getString();
           USE_SERIAL.println(sendReturn);
           if (sendReturn != "Duplicate hello entry. Entry dropped."&& httpCode2 == 200) {
-            wtv020sd16p.asyncPlayVoice(dial_id - 1);
+            wtv020sd16p.playVoice(dial_id - 1);
           }
-          USE_SERIAL.println("before sleep");
-          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-          USE_SERIAL.println("after sleep");
+//          USE_SERIAL.println("before sleep");
+//          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
+//          USE_SERIAL.println("after sleep");
 
 
         }
@@ -251,7 +251,7 @@ void loop() {
 
           // time to message back
           dial_id = random(firstByeIndex, totalAudio + 1);
-          wtv020sd16p.asyncPlayVoice(dial_id - 1);
+          wtv020sd16p.playVoice(dial_id - 1);
 
           type = "bye";
           isEnd = 1;
@@ -289,11 +289,11 @@ void loop() {
             USE_SERIAL.println(sendReturn);
 
             if (sendReturn != "Duplicate hello entry. Entry dropped."&& httpCode2 == 200) {
-              wtv020sd16p.asyncPlayVoice(dial_id - 1);
+              wtv020sd16p.playVoice(dial_id - 1);
             }
-            USE_SERIAL.println("before sleep");
-          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-          USE_SERIAL.println("after sleep");
+//            USE_SERIAL.println("before sleep");
+//          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
+//          USE_SERIAL.println("after sleep");
 
           }
 
