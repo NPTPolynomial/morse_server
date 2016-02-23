@@ -18,6 +18,7 @@ int resetPin = 5; // The pin number of the reset pin.
 int clockPin = 0; // The pin number of the clock pin.
 int dataPin = 4; // The pin number of the data pin.
 int busyPin = 13; // The pin number of the busy pin.
+int toATtiny = 12;
 
 Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
 
@@ -26,7 +27,9 @@ Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
 #define MAX_STRING_LEN 20
 
 //String SERVER_URL = "192.168.1.242";
-String SERVER_URL = "192.168.1.19";
+
+String SERVER_URL = "192.168.0.106";
+//String SERVER_URL = "192.168.1.19";
 String SERVER_PAGE = "/morse_server/";
 
 //int unusedPin = a1;
@@ -39,6 +42,8 @@ String receiveInstructionURL = SERVER_PAGE + "receive.php?node=" + NODE_NAME;
 int firstMsgIndex = 9;
 int firstByeIndex = 41;
 int totalAudio = 49;
+int counter;
+const int minProtectionTime = 15000; // 1500 delay * 10 seconds 
 
 ESP8266WiFiMulti WiFiMulti;
 
@@ -51,6 +56,8 @@ const int sleepTimeS = 10;
 void setup() {
   wtv020sd16p.reset();
 
+  counter = 0;
+  pinMode(toATtiny, OUTPUT);
 
   USE_SERIAL.begin(115200);
   // USE_SERIAL.setDebugOutput(true);
@@ -75,7 +82,8 @@ void setup() {
 //    
 //  }
   delay(1000);
-  WiFiMulti.addAP("XPS_2G", "1985517000");
+//  WiFiMulti.addAP("XPS_2G", "1985517000");
+  WiFiMulti.addAP("Eds-Studio-2ghz", "DesignStudio2015");
 
   pinMode(A0, INPUT);
 
@@ -87,12 +95,12 @@ void setup() {
 
 void loop() {
   // wait for WiFi connection
-  USE_SERIAL.print("busy pin: " + digitalRead(busyPin));
+  USE_SERIAL.print("busy pin: ");
   USE_SERIAL.println(digitalRead(busyPin));
 
 
   if ((WiFiMulti.run() == WL_CONNECTED)
-//  && (abs(millis() - prevMillis)) >= INTERVAL
+    && counter < minProtectionTime
     && digitalRead(busyPin) == LOW
      ) {
 
@@ -203,10 +211,6 @@ void loop() {
 //          USE_SERIAL.println("before sleep");
 //          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
 //          USE_SERIAL.println("after sleep");
-
-                      
-
-
 
         } else if (firstValue == "message") {
           USE_SERIAL.println("It worked. I have a message");
@@ -320,6 +324,13 @@ void loop() {
     } else {
       USE_SERIAL.print("[HTTP] GET... failed, no connection or no HTTP server\n");
     }
+  }
+
+  counter += 1500;
+
+  if (counter > minProtectionTime && digitalRead(busyPin) == LOW){
+    USE_SERIAL.println("ASLDK");
+    digitalWrite(toATtiny, HIGH);  
   }
 
 //          USE_SERIAL.println("before sleep");
