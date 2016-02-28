@@ -18,6 +18,7 @@ int resetPin = 5; // The pin number of the reset pin.
 int clockPin = 0; // The pin number of the clock pin.
 int dataPin = 4; // The pin number of the data pin.
 int busyPin = 13; // The pin number of the busy pin.
+int toATtiny = 12;
 
 Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
 
@@ -26,18 +27,23 @@ Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
 #define MAX_STRING_LEN 20
 
 //String SERVER_URL = "192.168.1.242";
-String SERVER_URL = "192.168.1.19";
+
+String SERVER_URL = "192.168.0.106";
+//String SERVER_URL = "192.168.1.19";
 String SERVER_PAGE = "/morse_server/";
 
 //int unusedPin = a1;
 
 String NODE_NAME = "a";
+String ALL_NODES[2] = {"a", "b"};
 
 String receiveInstructionURL = SERVER_PAGE + "receive.php?node=" + NODE_NAME;
 
 int firstMsgIndex = 9;
 int firstByeIndex = 41;
 int totalAudio = 49;
+int counter;
+const int minProtectionTime = 15000; // 1500 delay * 10 seconds 
 
 ESP8266WiFiMulti WiFiMulti;
 
@@ -50,6 +56,8 @@ const int sleepTimeS = 10;
 void setup() {
   wtv020sd16p.reset();
 
+  counter = 0;
+  pinMode(toATtiny, OUTPUT);
 
   USE_SERIAL.begin(115200);
   // USE_SERIAL.setDebugOutput(true);
@@ -60,20 +68,22 @@ void setup() {
 
   pinMode(BUILTIN_LED, OUTPUT);
 
-  for (uint8_t t = 4; t > 0; t--) {
-    USE_SERIAL.printf("[SETUP] WAIT %d...\n", t);
-    USE_SERIAL.flush();
-    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is acive low on the ESP-01)
-    delay(1000);                      // Wait for a second
-    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
 
-
-    delay(1000);
-  }
-
-  WiFiMulti.addAP("XPS_2G", "1985517000");
+//  for (uint8_t t = 4; t > 0; t--) {
+//    USE_SERIAL.printf("[SETUP] WAIT %d...\n", t);
+//    USE_SERIAL.flush();
+//    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
+//    // but actually the LED is on; this is because
+//    // it is acive low on the ESP-01)
+//    delay(1000);                      // Wait for a second
+//    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
+//
+//    delay(1000);
+//    
+//  }
+  delay(1000);
+//  WiFiMulti.addAP("XPS_2G", "1985517000");
+  WiFiMulti.addAP("Eds-Studio-2ghz", "DesignStudio2015");
 
   pinMode(A0, INPUT);
 
@@ -85,12 +95,13 @@ void setup() {
 
 void loop() {
   // wait for WiFi connection
-  USE_SERIAL.println(WiFiMulti.run() == WL_CONNECTED);
-
+  USE_SERIAL.print("busy pin: ");
+  USE_SERIAL.println(digitalRead(busyPin));
 
 
   if ((WiFiMulti.run() == WL_CONNECTED)
-//  && (abs(millis() - prevMillis)) >= INTERVAL
+    && counter < minProtectionTime
+    && digitalRead(busyPin) == LOW
      ) {
 
 //    for (int i = 0; i < 20; i++) {
@@ -182,17 +193,24 @@ void loop() {
           USE_SERIAL.println(sendReturn);
 
           if (sendReturn != "Duplicate hello entry. Entry dropped." && httpCode2 == 200) {
-            wtv020sd16p.asyncPlayVoice(dial_id - 1);
+            wtv020sd16p.playVoice(dial_id - 1);
+
+            delay(1000);
+            USE_SERIAL.println("I am playing");
+                        delay(1000);
+            USE_SERIAL.println("I am playing");
+                        delay(1000);
+            USE_SERIAL.println("I am playing");            
+            delay(1000);
+            USE_SERIAL.println("I am playing");            
+            delay(1000);
+            USE_SERIAL.println("I am playing");
           }
 
 
-          USE_SERIAL.println("before sleep");
-          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-          USE_SERIAL.println("after sleep");
-
-                      
-
-
+//          USE_SERIAL.println("before sleep");
+//          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
+//          USE_SERIAL.println("after sleep");
 
         } else if (firstValue == "message") {
           USE_SERIAL.println("It worked. I have a message");
@@ -231,11 +249,11 @@ void loop() {
           String sendReturn = http.getString();
           USE_SERIAL.println(sendReturn);
           if (sendReturn != "Duplicate hello entry. Entry dropped."&& httpCode2 == 200) {
-            wtv020sd16p.asyncPlayVoice(dial_id - 1);
+            wtv020sd16p.playVoice(dial_id - 1);
           }
-          USE_SERIAL.println("before sleep");
-          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-          USE_SERIAL.println("after sleep");
+//          USE_SERIAL.println("before sleep");
+//          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
+//          USE_SERIAL.println("after sleep");
 
 
         }
@@ -251,7 +269,7 @@ void loop() {
 
           // time to message back
           dial_id = random(firstByeIndex, totalAudio + 1);
-          wtv020sd16p.asyncPlayVoice(dial_id - 1);
+          wtv020sd16p.playVoice(dial_id - 1);
 
           type = "bye";
           isEnd = 1;
@@ -273,7 +291,12 @@ void loop() {
           if (randNum < 100) {
 
             //            String whoToTalk = randNum % 2 == 0 ? "b":"c";
-            String whoToTalk = "b";
+//            String whoToTalk = "b";
+            String whoToTalk;
+            do {
+              whoToTalk = ALL_NODES[random(0, 2)]; 
+            } while (NODE_NAME == whoToTalk);
+            
             int dial_id = random(1, firstMsgIndex);
 
             String parameters = SERVER_PAGE + "send.php?from=" + NODE_NAME + "&to=" +
@@ -289,11 +312,9 @@ void loop() {
             USE_SERIAL.println(sendReturn);
 
             if (sendReturn != "Duplicate hello entry. Entry dropped."&& httpCode2 == 200) {
-              wtv020sd16p.asyncPlayVoice(dial_id - 1);
+              wtv020sd16p.playVoice(dial_id - 1);
             }
-            USE_SERIAL.println("before sleep");
-          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-          USE_SERIAL.println("after sleep");
+
 
           }
 
@@ -305,8 +326,19 @@ void loop() {
     }
   }
 
+  counter += 1500;
 
-  delay(100);
+  if (counter > minProtectionTime && digitalRead(busyPin) == LOW){
+    USE_SERIAL.println("ASLDK");
+    digitalWrite(toATtiny, HIGH);  
+  }
+
+//          USE_SERIAL.println("before sleep");
+//          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
+//          USE_SERIAL.println("after sleep");
+
+
+  delay(1500);
   //  delay(15000);
 }
 
