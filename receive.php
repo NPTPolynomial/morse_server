@@ -45,13 +45,22 @@ if($node){
           $from=$row["from"];
           $end=$row["end"];
 		  $count=$row["count"];
+		  $closeness= 0;
+		  
+		  // calculating closeness variable
+		  // Return the number of bye end = 1 where 
+		  
+		  $sql_closeness = "SELECT * FROM `board` WHERE ((`from` = '$from' AND `to` = '$node') OR (`from` = '$node' AND `to` = '$from')) AND `type` = 'bye' AND `end` = '1'";
+		  $closeness_result = mysqli_query($conn, $sql_closeness);
+		  if($closeness_result){
+		  	$closeness = mysqli_num_rows($closeness_result);
+		  }
 
-
-          echo "$type,$from,$end,$count";
+          echo "$type,$from,$end,$count,$closeness";
       }
   }else{
     if($DEBUG) echo "Could not find anything in the table";
-    echo "noRowError,0,0,0";
+    echo "noRowError,0,0,0,0";
   }
 
   //echo json_encode($e);
@@ -60,9 +69,10 @@ if($node){
   $from="0";
   $end="0";
   $count="0";
+  $closeness="0";
 
 
-  echo "$type,$from,$end,$count";
+  echo "$type,$from,$end,$count,$closeness";
 
 }
 $conn->close();
