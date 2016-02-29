@@ -32,7 +32,7 @@ Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
 String SERVER_URL = "192.168.1.19";
 String SERVER_PAGE = "/morse_server/";
 
-//int unusedPin = a1;
+//int unusedPin = 50;
 
 String NODE_NAME = "a";
 String ALL_NODES[2] = {"a", "b"};
