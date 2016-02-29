@@ -28,8 +28,8 @@ Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
 
 //String SERVER_URL = "192.168.1.242";
 
-String SERVER_URL = "192.168.0.106";
-//String SERVER_URL = "192.168.1.19";
+//String SERVER_URL = "192.168.0.106";
+String SERVER_URL = "192.168.1.19";
 String SERVER_PAGE = "/morse_server/";
 
 //int unusedPin = a1;
@@ -48,8 +48,6 @@ const int minProtectionTime = 15000; // 1500 delay * 10 seconds
 ESP8266WiFiMulti WiFiMulti;
 
 unsigned long prevMillis = 0;
-// This interval is the time that a track
-const long INTERVAL = 20000;
 
 const int sleepTimeS = 10;
 
@@ -88,8 +86,6 @@ void setup() {
   pinMode(A0, INPUT);
 
   randomSeed(analogRead(A0));
-
-
 
 }
 
@@ -140,25 +136,23 @@ void loop() {
         int commaIndex = payload.indexOf(',');
         int secondCommaIndex = payload.indexOf(',', commaIndex + 1);
         int thirdCommaIndex = payload.indexOf(',', secondCommaIndex + 1);
+        int forthCommaIndex = payload.indexOf(',', thirdCommaIndex + 1);
         String firstValue = payload.substring(0, commaIndex);
         String secondValue = payload.substring(commaIndex + 1, secondCommaIndex);
         String thirdValue = payload.substring(secondCommaIndex + 1, thirdCommaIndex); //To the end of the string
-        String forthValue = payload.substring(thirdCommaIndex + 1); //To the end of the string
+        String forthValue = payload.substring(thirdCommaIndex + 1, forthCommaIndex); //To the end of the string
+        int fifthValue = payload.substring(forthCommaIndex + 1).toInt();
         USE_SERIAL.println("first: " + firstValue);
         USE_SERIAL.println("secondValue: " + secondValue);
         USE_SERIAL.println("thirdValue: " + thirdValue);
         USE_SERIAL.println("forthValue: " + forthValue);
-
+        USE_SERIAL.println("fifthValue: " + fifthValue);
 
         USE_SERIAL.println(payload);
-
-
 
         if (firstValue == "hello") {
           USE_SERIAL.println("It worked. I have a hello");
           USE_SERIAL.println("Sending a message back to the server...");
-
-
 
           int count = forthValue.toInt() + 1;
 
@@ -175,7 +169,13 @@ void loop() {
             isEnd = 1;
           } else {
             // it was the last hello, move to message phase
-            dial_id = random(firstMsgIndex, firstByeIndex);
+            if (fifthValue > 10){
+              dial_id = random(firstMsgIndex, firstMsgIndex + 10);
+            } else if (fifthValue >5){
+              dial_id = random(firstMsgIndex + 10, firstMsgIndex + 20);
+            } else {
+              dial_id = random(firstMsgIndex + 20, firstByeIndex);
+            }
 
             type = "message";
             isEnd = 0;
@@ -222,7 +222,15 @@ void loop() {
           int isEnd;
 
           if (thirdValue == "0") {
-            dial_id = random(firstMsgIndex, firstByeIndex);
+
+            if (fifthValue > 10){
+              dial_id = random(firstMsgIndex, firstMsgIndex + 10);
+            } else if (fifthValue >5){
+              dial_id = random(firstMsgIndex + 10, firstMsgIndex + 20);
+            } else {
+              dial_id = random(firstMsgIndex + 20, firstByeIndex);
+            }
+            
 
             type = "message";
 
