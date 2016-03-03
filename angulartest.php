@@ -150,9 +150,10 @@ function sendFromTo(from,to,type,end){
 	<th>To</th>
 	<th>Dial_id</th>
 	<th>Dial_message</th>
+	<th>Count</th>
 	
 	<tr>
-	<td id="loading_sign" class="loadingImg" colspan="8"><img src="img/hex-loader2.gif"></img></td>
+	<td id="loading_sign" class="loadingImg" colspan="9"><img src="img/hex-loader2.gif"></img></td>
 	</tr>
 	
 	<tr ng-repeat="x in names">
@@ -164,6 +165,7 @@ function sendFromTo(from,to,type,end){
 		<td>{{ x.to }}</td>
 		<td>{{ x.dial_id }}</td>
 		<td>{{ x.dial_message }}</td>
+		<td>{{ x.count }}</td>
 	</tr>
 </table>
 
