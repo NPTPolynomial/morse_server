@@ -104,8 +104,35 @@ table tr:nth-child(even) {
 
 </style>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script src="js/moment.js"></script>
 <script src="js/moment-timezone.js"></script>
+
+<script>
+// Button functionality
+function sendFromTo(from,to,type,end){
+	
+	console.log("Entered sendFromTo: " + from + to + type + end);
+	
+	$.ajax({
+		url: 'send.php',
+		data: 'from='+from+'&to='+to+'&type='+type+'&dial_id=1&count=1&end='+end,
+		type: 'GET',
+		dataType: 'json',
+		success: function(response){
+			console.log("Successfully sent ");
+			$("return_message").html("<p>Successfully Sent</p>");
+		},
+		error: function(e){
+			console.log("Response: ");
+			console.log(e.responseText);
+			$("return_message").html("<p>Failed Sent" + e + "</p>");
+		}
+		
+	});		
+}
+
+</script>
 
 
 </head>
@@ -146,6 +173,22 @@ table tr:nth-child(even) {
 	<input class="button-primary" type="submit" value="Clear All Tables">
   </fieldset>
 </form>
+
+<button onclick=sendFromTo('a','b','hello','0')>A: Send Hello 0</button>
+<button onclick=sendFromTo('a','b','hello','1')>A: Send Hello 1</button>
+<button onclick=sendFromTo('a','b','msg','0')>A: Send MSG 0</button>
+<button onclick=sendFromTo('a','b','msg','1')>A: Send MSG 1</button>
+<button onclick=sendFromTo('a','b','bye','0')>A: Send Bye 0</button>
+<button onclick=sendFromTo('a','b','bye','1')>A: Send Bye 1</button>
+<br />
+<button onclick=sendFromTo('b','a','hello','0')>B: Send Hello 0</button>
+<button onclick=sendFromTo('b','a','hello','1')>B: Send Hello 1</button>
+<button onclick=sendFromTo('b','a','msg','0')>B: Send MSG 0</button>
+<button onclick=sendFromTo('b','a','msg','1')>B: Send MSG 1</button>
+<button onclick=sendFromTo('b','a','bye','0')>B: Send Bye 0</button>
+<button onclick=sendFromTo('b','a','bye','1')>B: Send Bye 1</button>
+                                
+<p id='return_message'></p>
 
 
 <div id="bubble_board">
@@ -227,18 +270,15 @@ app.controller('customersCtrl', function($scope, $http, $interval) {
     //c++;
     $http.get("getfeed.php")
     .then(function (response) {$scope.names = response.data;
-
-		$scope.names.forEach(function(name) {
-		    //console.log(name.datetime);
-
-			name.datetime = moment(moment.utc(name.datetime).toDate()).format('YYYY-MM-DD HH:mm:ss');
-			//console.log("New time: " + name.datetime);
-		  });
-			
-			
-			
-	
 		if(($scope.names)){
+			
+			$scope.names.forEach(function(name) {
+			    //console.log(name.datetime);
+
+				name.datetime = moment(moment.utc(name.datetime).toDate()).format('YYYY-MM-DD HH:mm:ss');
+				//console.log("New time: " + name.datetime);
+			  });
+		
 			document.getElementById("loading_sign").style.display = 'none';
 			document.getElementById("bubble_board").style.display = 'block';
 		}
