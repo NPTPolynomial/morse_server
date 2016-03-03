@@ -113,10 +113,18 @@ table tr:nth-child(even) {
 function sendFromTo(from,to,type,end){
 	
 	console.log("Entered sendFromTo: " + from +" "+ to +" "+ type +" "+ end);
+	dial_id = 1;
+	if(type=='msg'){
+		dial_id = 9;
+	}else if(type=='bye'){
+		dial_id = 41;
+	}else{
+		dial_id = 1;
+	}
 	
 	$.ajax({
 		url: 'send.php',
-		data: 'from='+from+'&to='+to+'&type='+type+'&dial_id=1&count=1&end='+end,
+		data: 'from='+from+'&to='+to+'&type='+type+'&dial_id='+dial_id+'&count=1&end='+end,
 		type: 'GET',
 		dataType: 'json',
 		success: function(response){
