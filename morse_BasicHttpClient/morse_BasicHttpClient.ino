@@ -28,8 +28,8 @@ Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
 
 //String SERVER_URL = "192.168.1.242";
 
-//String SERVER_URL = "192.168.0.106";
-String SERVER_URL = "192.168.1.19";
+String SERVER_URL = "192.168.0.106";
+//String SERVER_URL = "192.168.1.19";
 String SERVER_PAGE = "/morse_server/";
 
 //int unusedPin = 50;
@@ -43,7 +43,7 @@ int firstMsgIndex = 9;
 int firstByeIndex = 41;
 int totalAudio = 49;
 int counter;
-const int minProtectionTime = 15000; // 1500 delay * 10 seconds 
+const int minProtectionTime = 15000; // 1500 delay * 10 seconds
 
 ESP8266WiFiMulti WiFiMulti;
 
@@ -67,20 +67,20 @@ void setup() {
   pinMode(BUILTIN_LED, OUTPUT);
 
 
-//  for (uint8_t t = 4; t > 0; t--) {
-//    USE_SERIAL.printf("[SETUP] WAIT %d...\n", t);
-//    USE_SERIAL.flush();
-//    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-//    // but actually the LED is on; this is because
-//    // it is acive low on the ESP-01)
-//    delay(1000);                      // Wait for a second
-//    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
-//
-//    delay(1000);
-//    
-//  }
+  //  for (uint8_t t = 4; t > 0; t--) {
+  //    USE_SERIAL.printf("[SETUP] WAIT %d...\n", t);
+  //    USE_SERIAL.flush();
+  //    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
+  //    // but actually the LED is on; this is because
+  //    // it is acive low on the ESP-01)
+  //    delay(1000);                      // Wait for a second
+  //    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
+  //
+  //    delay(1000);
+  //
+  //  }
   delay(1000);
-//  WiFiMulti.addAP("XPS_2G", "1985517000");
+  //  WiFiMulti.addAP("XPS_2G", "1985517000");
   WiFiMulti.addAP("Eds-Studio-2ghz", "DesignStudio2015");
 
   pinMode(A0, INPUT);
@@ -96,20 +96,20 @@ void loop() {
 
 
   if ((WiFiMulti.run() == WL_CONNECTED)
-    && counter < minProtectionTime
-    && digitalRead(busyPin) == LOW
+      && counter < minProtectionTime
+      && digitalRead(busyPin) == LOW
      ) {
 
-//    for (int i = 0; i < 20; i++) {
-//      digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-//      // but actually the LED is on; this is because
-//      // it is acive low on the ESP-01)
-//      delay(500);                      // Wait for a second
-//      digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
-//
-//
-//      delay(500);
-//    }
+    //    for (int i = 0; i < 20; i++) {
+    //      digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
+    //      // but actually the LED is on; this is because
+    //      // it is acive low on the ESP-01)
+    //      delay(500);                      // Wait for a second
+    //      digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
+    //
+    //
+    //      delay(500);
+    //    }
 
 
     prevMillis = millis();
@@ -169,13 +169,8 @@ void loop() {
             isEnd = 1;
           } else {
             // it was the last hello, move to message phase
-            if (fifthValue > 10){
-              dial_id = random(firstMsgIndex, firstMsgIndex + 10);
-            } else if (fifthValue >5){
-              dial_id = random(firstMsgIndex + 10, firstMsgIndex + 20);
-            } else {
-              dial_id = random(firstMsgIndex + 20, firstByeIndex);
-            }
+
+            dial_id = dial_id_from_conversation(fifthValue);
 
             type = "message";
             isEnd = 0;
@@ -197,20 +192,20 @@ void loop() {
 
             delay(1000);
             USE_SERIAL.println("I am playing");
-                        delay(1000);
-            USE_SERIAL.println("I am playing");
-                        delay(1000);
-            USE_SERIAL.println("I am playing");            
             delay(1000);
-            USE_SERIAL.println("I am playing");            
+            USE_SERIAL.println("I am playing");
+            delay(1000);
+            USE_SERIAL.println("I am playing");
+            delay(1000);
+            USE_SERIAL.println("I am playing");
             delay(1000);
             USE_SERIAL.println("I am playing");
           }
 
 
-//          USE_SERIAL.println("before sleep");
-//          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-//          USE_SERIAL.println("after sleep");
+          //          USE_SERIAL.println("before sleep");
+          //          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
+          //          USE_SERIAL.println("after sleep");
 
         } else if (firstValue == "message") {
           USE_SERIAL.println("It worked. I have a message");
@@ -223,18 +218,11 @@ void loop() {
 
           if (thirdValue == "0") {
 
-            if (fifthValue > 10){
-              dial_id = random(firstMsgIndex, firstMsgIndex + 10);
-            } else if (fifthValue >5){
-              dial_id = random(firstMsgIndex + 10, firstMsgIndex + 20);
-            } else {
-              dial_id = random(firstMsgIndex + 20, firstByeIndex);
-            }
-            
+            dial_id = dial_id_from_conversation(fifthValue);
 
             type = "message";
 
-            if (random(0, 100) <= 70) {
+            if (random(0, 100) <= 50) {
               isEnd = 0;
             } else {
               isEnd = 1;
@@ -256,12 +244,12 @@ void loop() {
           int httpCode2 = http.GET();
           String sendReturn = http.getString();
           USE_SERIAL.println(sendReturn);
-          if (sendReturn != "Duplicate hello entry. Entry dropped."&& httpCode2 == 200) {
+          if (sendReturn != "Duplicate hello entry. Entry dropped." && httpCode2 == 200) {
             wtv020sd16p.playVoice(dial_id - 1);
           }
-//          USE_SERIAL.println("before sleep");
-//          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-//          USE_SERIAL.println("after sleep");
+          //          USE_SERIAL.println("before sleep");
+          //          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
+          //          USE_SERIAL.println("after sleep");
 
 
         }
@@ -299,12 +287,12 @@ void loop() {
           if (randNum < 100) {
 
             //            String whoToTalk = randNum % 2 == 0 ? "b":"c";
-//            String whoToTalk = "b";
+            //            String whoToTalk = "b";
             String whoToTalk;
             do {
-              whoToTalk = ALL_NODES[random(0, 2)]; 
+              whoToTalk = ALL_NODES[random(0, 2)];
             } while (NODE_NAME == whoToTalk);
-            
+
             int dial_id = random(1, firstMsgIndex);
 
             String parameters = SERVER_PAGE + "send.php?from=" + NODE_NAME + "&to=" +
@@ -319,7 +307,7 @@ void loop() {
             String sendReturn = http.getString();
             USE_SERIAL.println(sendReturn);
 
-            if (sendReturn != "Duplicate hello entry. Entry dropped."&& httpCode2 == 200) {
+            if (sendReturn != "Duplicate hello entry. Entry dropped." && httpCode2 == 200) {
               wtv020sd16p.playVoice(dial_id - 1);
             }
 
@@ -336,17 +324,37 @@ void loop() {
 
   counter += 1500;
 
-  if (counter > minProtectionTime && digitalRead(busyPin) == LOW){
+  if (counter > minProtectionTime && digitalRead(busyPin) == LOW) {
     USE_SERIAL.println("ASLDK");
-    digitalWrite(toATtiny, HIGH);  
+    USE_SERIAL.println(counter);
+    counter = 0;
+    USE_SERIAL.println(counter);
+    digitalWrite(toATtiny, HIGH);
+    ESP.deepSleep(20 * 1000000);
   }
 
-//          USE_SERIAL.println("before sleep");
-//          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-//          USE_SERIAL.println("after sleep");
+  //          USE_SERIAL.println("before sleep");
+  //          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
+  //          USE_SERIAL.println("after sleep");
 
 
   delay(1500);
-  //  delay(15000);
+  
 }
+
+int dial_id_from_conversation(int numOfConversation) {
+
+  int result;
+
+  if (numOfConversation > 5) {
+    result = random(firstMsgIndex + 20, firstByeIndex);
+  } else if (numOfConversation > 2) {
+    result = random(firstMsgIndex + 10, firstMsgIndex + 20);
+  } else {
+    result = random(firstMsgIndex, firstMsgIndex + 10);
+  }
+
+  return result;
+}
+
 
