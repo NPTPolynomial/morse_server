@@ -112,7 +112,7 @@ table tr:nth-child(even) {
 // Button functionality
 function sendFromTo(from,to,type,end){
 	
-	console.log("Entered sendFromTo: " + from + to + type + end);
+	console.log("Entered sendFromTo: " + from +" "+ to +" "+ type +" "+ end);
 	
 	$.ajax({
 		url: 'send.php',
