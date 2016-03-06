@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 07, 2016 at 12:03 AM
+-- Generation Time: Mar 07, 2016 at 12:17 AM
 -- Server version: 5.5.29
 -- PHP Version: 5.4.10
 
@@ -19,6 +19,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `morse`
 --
+DROP DATABASE `morse`;
+CREATE DATABASE `morse` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `morse`;
 
 -- --------------------------------------------------------
 
@@ -26,6 +29,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `board`
 --
 
+DROP TABLE IF EXISTS `board`;
 CREATE TABLE `board` (
   `datetime` datetime NOT NULL,
   `board_id` int(12) NOT NULL AUTO_INCREMENT,
@@ -37,7 +41,15 @@ CREATE TABLE `board` (
   `count` int(8) NOT NULL DEFAULT '0',
   `network` varchar(3) NOT NULL,
   PRIMARY KEY (`board_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `board`
+--
+
+INSERT INTO `board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`, `network`) VALUES
+('2016-03-06 23:16:12', 1, 'a', 'b', 'hello', '1', '0', 1, '2'),
+('2016-03-06 23:16:16', 2, 'a', 'b', 'hello', '1', '0', 1, '1');
 
 -- --------------------------------------------------------
 
@@ -45,6 +57,7 @@ CREATE TABLE `board` (
 -- Table structure for table `dialog`
 --
 
+DROP TABLE IF EXISTS `dialog`;
 CREATE TABLE `dialog` (
   `dial_id` int(8) NOT NULL AUTO_INCREMENT,
   `dial_message` varchar(26) DEFAULT NULL,
@@ -112,6 +125,7 @@ INSERT INTO `dialog` (`dial_id`, `dial_message`) VALUES
 -- Table structure for table `table_a1`
 --
 
+DROP TABLE IF EXISTS `table_a1`;
 CREATE TABLE `table_a1` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -129,6 +143,7 @@ CREATE TABLE `table_a1` (
 -- Table structure for table `table_a2`
 --
 
+DROP TABLE IF EXISTS `table_a2`;
 CREATE TABLE `table_a2` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -146,6 +161,7 @@ CREATE TABLE `table_a2` (
 -- Table structure for table `table_b1`
 --
 
+DROP TABLE IF EXISTS `table_b1`;
 CREATE TABLE `table_b1` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -155,7 +171,14 @@ CREATE TABLE `table_b1` (
   `dial_id` varchar(20) NOT NULL DEFAULT '0',
   `count` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `table_b1`
+--
+
+INSERT INTO `table_b1` (`date`, `id`, `type`, `from`, `end`, `dial_id`, `count`) VALUES
+('2016-03-06 23:16:16', 1, 'hello', 'a', '0', '1', 1);
 
 -- --------------------------------------------------------
 
@@ -163,6 +186,7 @@ CREATE TABLE `table_b1` (
 -- Table structure for table `table_b2`
 --
 
+DROP TABLE IF EXISTS `table_b2`;
 CREATE TABLE `table_b2` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -172,7 +196,14 @@ CREATE TABLE `table_b2` (
   `dial_id` varchar(20) NOT NULL DEFAULT '0',
   `count` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `table_b2`
+--
+
+INSERT INTO `table_b2` (`date`, `id`, `type`, `from`, `end`, `dial_id`, `count`) VALUES
+('2016-03-06 23:16:12', 1, 'hello', 'a', '0', '1', 1);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
