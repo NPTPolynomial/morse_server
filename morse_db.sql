@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 12, 2016 at 03:22 AM
+-- Generation Time: Mar 07, 2016 at 12:03 AM
 -- Server version: 5.5.29
 -- PHP Version: 5.4.10
 
@@ -26,7 +26,6 @@ SET time_zone = "+00:00";
 -- Table structure for table `board`
 --
 
-DROP TABLE IF EXISTS `board`;
 CREATE TABLE `board` (
   `datetime` datetime NOT NULL,
   `board_id` int(12) NOT NULL AUTO_INCREMENT,
@@ -36,21 +35,9 @@ CREATE TABLE `board` (
   `dial_id` varchar(30) NOT NULL DEFAULT '0',
   `end` varchar(2) NOT NULL,
   `count` int(8) NOT NULL DEFAULT '0',
+  `network` varchar(3) NOT NULL,
   PRIMARY KEY (`board_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
-
---
--- Dumping data for table `board`
---
-
-INSERT INTO `board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`) VALUES
-('2016-02-12 00:07:40', 4, 'a', 'b', 'message', '2', '0', 1),
-('2016-02-12 00:30:23', 5, 'a', 'b', 'message', '2', '0', 1),
-('2016-02-12 00:49:24', 6, 'a', 'b', 'message', '2', '0', 1),
-('2016-02-12 02:05:59', 7, 'a', 'b', 'hello', '2', '0', 1),
-('2016-02-12 02:06:20', 8, 'a', 'b', 'bye', '2', '0', 1),
-('2016-02-12 02:07:28', 9, 'a', 'b', 'bye', '2', '0', 1),
-('2016-02-12 02:11:35', 10, 'a', 'b', 'bye', '23', '1', 1);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -58,7 +45,6 @@ INSERT INTO `board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `e
 -- Table structure for table `dialog`
 --
 
-DROP TABLE IF EXISTS `dialog`;
 CREATE TABLE `dialog` (
   `dial_id` int(8) NOT NULL AUTO_INCREMENT,
   `dial_message` varchar(26) DEFAULT NULL,
@@ -123,11 +109,10 @@ INSERT INTO `dialog` (`dial_id`, `dial_message`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `table_a`
+-- Table structure for table `table_a1`
 --
 
-DROP TABLE IF EXISTS `table_a`;
-CREATE TABLE `table_a` (
+CREATE TABLE `table_a1` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `type` varchar(35) NOT NULL,
@@ -141,11 +126,10 @@ CREATE TABLE `table_a` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `table_b`
+-- Table structure for table `table_a2`
 --
 
-DROP TABLE IF EXISTS `table_b`;
-CREATE TABLE `table_b` (
+CREATE TABLE `table_a2` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `type` varchar(35) NOT NULL,
@@ -154,27 +138,41 @@ CREATE TABLE `table_b` (
   `dial_id` varchar(20) NOT NULL DEFAULT '0',
   `count` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `table_b`
+-- Table structure for table `table_b1`
 --
 
-INSERT INTO `table_b` (`date`, `id`, `type`, `from`, `end`, `dial_id`, `count`) VALUES
-('2016-02-11 23:54:08', 1, 'message', 'a', '0', '2', 1),
-('2016-02-11 23:55:34', 2, 'message', 'a', '0', '2', 1),
-('2016-02-11 23:56:34', 3, 'message', 'a', '0', '2', 1),
-('2016-02-11 23:58:20', 4, 'message', 'a', '0', '2', 1),
-('2016-02-11 23:59:09', 5, 'message', 'a', '0', '2', 1),
-('2016-02-11 23:59:56', 6, 'message', 'a', '0', '2', 1),
-('2016-02-12 00:06:08', 7, 'message', 'a', '0', '2', 1),
-('2016-02-12 00:06:54', 8, 'message', 'a', '0', '2', 1),
-('2016-02-12 00:07:40', 9, 'message', 'a', '0', '2', 1),
-('2016-02-12 00:30:23', 10, 'message', 'a', '0', '2', 1),
-('2016-02-12 00:49:24', 11, 'message', 'a', '0', '2', 1),
-('2016-02-12 02:05:59', 12, 'hello', 'a', '0', '2', 1),
-('2016-02-12 02:06:20', 13, 'bye', 'a', '0', '2', 1),
-('2016-02-12 02:07:28', 14, 'bye', 'a', '0', '2', 1);
+CREATE TABLE `table_b1` (
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `type` varchar(35) NOT NULL,
+  `from` varchar(10) NOT NULL,
+  `end` varchar(2) NOT NULL,
+  `dial_id` varchar(20) NOT NULL DEFAULT '0',
+  `count` int(8) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `table_b2`
+--
+
+CREATE TABLE `table_b2` (
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `type` varchar(35) NOT NULL,
+  `from` varchar(10) NOT NULL,
+  `end` varchar(2) NOT NULL,
+  `dial_id` varchar(20) NOT NULL DEFAULT '0',
+  `count` int(8) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

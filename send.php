@@ -19,12 +19,13 @@ if(isset($conn->connection_error)){
 
 
 // check if all parameters are present
-if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($_GET['dial_id']) && isset($_GET['count'])){
+if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($_GET['dial_id']) && isset($_GET['count']) && isset($_GET['network'])){
 	$from = $_GET['from'];
 	$to = $_GET['to'];
 	$type = $_GET['type'];
 	$dial_id = $_GET['dial_id'];
 	$count = $_GET['count'];
+	$network = $_GET['network'];
 
 	if(isset($_GET['end'])){
 	$end = $_GET['end'];
@@ -33,7 +34,7 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($
 	}
 
 	// get the right table to insert into
-	$table_name = "table_" . $to;
+	$table_name = "table_" . $to. $network;
 
 
 	
@@ -76,7 +77,7 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($
 				if($DEBUG) echo "Successfully inserted";
 
 				// remove the last instruction that you did previously.
-				$table_from_name = "table_" . $from;
+				$table_from_name = "table_" . $from . $network;
 				$sql_delete_top = mysqli_query($conn, "DELETE FROM `$table_from_name` ORDER BY `id` LIMIT 1");
 				if($sql_delete_top){
 					if($DEBUG) echo "Successfully Deleted Previous instruction";
@@ -89,7 +90,7 @@ if(isset($_GET['from']) && isset($_GET['to']) && isset($_GET['type']) && isset($
 					$utc = strtotime($utc_str);
 					
 					
-					$sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`) VALUES ('$utc_str', NULL ,'$from', '$to', '$type', '$dial_id', '$end', '$count')");
+					$sql_insert_into_board = mysqli_query($conn, "INSERT INTO `board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`, `network`) VALUES ('$utc_str', NULL ,'$from', '$to', '$type', '$dial_id', '$end', '$count', '$network')");
 					if($sql_insert_into_board){
 					 	if($DEBUG) echo "Successfully ADDED TO BOARD";
 					}else{

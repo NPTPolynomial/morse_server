@@ -124,7 +124,7 @@ function sendFromTo(from,to,type,end){
 	
 	$.ajax({
 		url: 'send.php',
-		data: 'from='+from+'&to='+to+'&type='+type+'&dial_id='+dial_id+'&count=1&end='+end,
+		data: 'from='+from+'&to='+to+'&type='+type+'&dial_id='+dial_id+'&count=1&end='+end+'&network=1',
 		type: 'GET',
 		dataType: 'json',
 		success: function(response){
@@ -159,9 +159,10 @@ function sendFromTo(from,to,type,end){
 	<th>Dial_id</th>
 	<th>Dial_message</th>
 	<th>Count</th>
+	<th>Network</th>
 	
 	<tr>
-	<td id="loading_sign" class="loadingImg" colspan="9"><img src="img/hex-loader2.gif"></img></td>
+	<td id="loading_sign" class="loadingImg" colspan="10"><img src="img/hex-loader2.gif"></img></td>
 	</tr>
 	
 	<tr ng-repeat="x in names">
@@ -174,6 +175,7 @@ function sendFromTo(from,to,type,end){
 		<td>{{ x.dial_id }}</td>
 		<td>{{ x.dial_message }}</td>
 		<td>{{ x.count }}</td>
+		<td>{{ x.network }}</td>
 	</tr>
 </table>
 
@@ -184,19 +186,19 @@ function sendFromTo(from,to,type,end){
   </fieldset>
 </form>
 
-<button onclick=sendFromTo('a','b','hello','0')>A: Send Hello 0</button>
-<button onclick=sendFromTo('a','b','hello','1')>A: Send Hello 1</button>
-<button onclick=sendFromTo('a','b','msg','0')>A: Send MSG 0</button>
-<button onclick=sendFromTo('a','b','msg','1')>A: Send MSG 1</button>
-<button onclick=sendFromTo('a','b','bye','0')>A: Send Bye 0</button>
-<button onclick=sendFromTo('a','b','bye','1')>A: Send Bye 1</button>
+<button onclick=sendFromTo('a','b','hello','0')>A1: Send Hello 0</button>
+<button onclick=sendFromTo('a','b','hello','1')>A1: Send Hello 1</button>
+<button onclick=sendFromTo('a','b','msg','0')>A1: Send MSG 0</button>
+<button onclick=sendFromTo('a','b','msg','1')>A1: Send MSG 1</button>
+<button onclick=sendFromTo('a','b','bye','0')>A1: Send Bye 0</button>
+<button onclick=sendFromTo('a','b','bye','1')>A1: Send Bye 1</button>
 <br />
-<button onclick=sendFromTo('b','a','hello','0')>B: Send Hello 0</button>
-<button onclick=sendFromTo('b','a','hello','1')>B: Send Hello 1</button>
-<button onclick=sendFromTo('b','a','msg','0')>B: Send MSG 0</button>
-<button onclick=sendFromTo('b','a','msg','1')>B: Send MSG 1</button>
-<button onclick=sendFromTo('b','a','bye','0')>B: Send Bye 0</button>
-<button onclick=sendFromTo('b','a','bye','1')>B: Send Bye 1</button>
+<button onclick=sendFromTo('b','a','hello','0')>B1: Send Hello 0</button>
+<button onclick=sendFromTo('b','a','hello','1')>B1: Send Hello 1</button>
+<button onclick=sendFromTo('b','a','msg','0')>B1: Send MSG 0</button>
+<button onclick=sendFromTo('b','a','msg','1')>B1: Send MSG 1</button>
+<button onclick=sendFromTo('b','a','bye','0')>B1: Send Bye 0</button>
+<button onclick=sendFromTo('b','a','bye','1')>B1: Send Bye 1</button>
                                 
 <p id='return_message'></p>
 

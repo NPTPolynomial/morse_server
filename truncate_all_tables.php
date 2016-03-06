@@ -18,7 +18,7 @@ if(isset($conn->connection_error)){
     die("Connection failed: " . $conn->connect_error);
 }
 
-$tables_to_drop = array("board", "table_a", "table_b");
+$tables_to_drop = array("board", "table_a1", "table_b1", "table_a2", "table_b2");
 
 foreach($tables_to_drop as $table){
 	$query = "TRUNCATE TABLE " . $table;
