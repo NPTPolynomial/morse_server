@@ -28,16 +28,19 @@ Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
 
 //String SERVER_URL = "192.168.1.242";
 
-String SERVER_URL = "192.168.0.106";
-//String SERVER_URL = "192.168.1.19";
+//String SERVER_URL = "192.168.0.106";
+//String SERVEL_URL = "192.168.1.208";
+
+String SERVER_URL = "192.168.1.19";
 String SERVER_PAGE = "/morse_server/";
 
 //int unusedPin = 50;
 
-String NODE_NAME = "a";
+String NODE_NAME = "b";
+String NETWORK = "1";
 String ALL_NODES[2] = {"a", "b"};
 
-String receiveInstructionURL = SERVER_PAGE + "receive.php?node=" + NODE_NAME;
+String receiveInstructionURL = SERVER_PAGE + "receive.php?node=" + NODE_NAME+NETWORK;
 
 int firstMsgIndex = 9;
 int firstByeIndex = 41;
@@ -50,6 +53,22 @@ ESP8266WiFiMulti WiFiMulti;
 unsigned long prevMillis = 0;
 
 const int sleepTimeS = 10;
+
+int dial_id_from_conversation(int numOfConversation) {
+
+  int result;
+
+  if (numOfConversation > 5) {
+    result = random(firstMsgIndex + 20, firstByeIndex);
+  } else if (numOfConversation > 2) {
+    result = random(firstMsgIndex + 10, firstMsgIndex + 20);
+  } else {
+    result = random(firstMsgIndex, firstMsgIndex + 10);
+  }
+
+  return result;
+}
+
 
 void setup() {
   wtv020sd16p.reset();
@@ -80,8 +99,8 @@ void setup() {
   //
   //  }
   delay(1000);
-  //  WiFiMulti.addAP("XPS_2G", "1985517000");
-  WiFiMulti.addAP("Eds-Studio-2ghz", "DesignStudio2015");
+  WiFiMulti.addAP("XPS_2G", "1985517000");
+//  WiFiMulti.addAP("Eds-Studio-2ghz", "DesignStudio2015");
 
   pinMode(A0, INPUT);
 
@@ -141,7 +160,8 @@ void loop() {
         String secondValue = payload.substring(commaIndex + 1, secondCommaIndex);
         String thirdValue = payload.substring(secondCommaIndex + 1, thirdCommaIndex); //To the end of the string
         String forthValue = payload.substring(thirdCommaIndex + 1, forthCommaIndex); //To the end of the string
-        int fifthValue = payload.substring(forthCommaIndex + 1).toInt();
+        String fifthValString = payload.substring(forthCommaIndex + 1);
+        int fifthValue = fifthValString.toInt();
         USE_SERIAL.println("first: " + firstValue);
         USE_SERIAL.println("secondValue: " + secondValue);
         USE_SERIAL.println("thirdValue: " + thirdValue);
@@ -178,8 +198,8 @@ void loop() {
 
           String parameters = SERVER_PAGE + "send.php?from=" + NODE_NAME + "&to=" +
                               secondValue + "&type=" + type + "&end=" +
-                              isEnd + "&dial_id=" + dial_id + "&count=" + count;
-
+                              isEnd + "&dial_id=" + dial_id + "&count=" + count + "&network=" + NETWORK;
+                              
           http.begin(SERVER_URL, 80, parameters); //HTTP
           int httpCode2 = http.GET();
           USE_SERIAL.println(parameters);
@@ -238,7 +258,7 @@ void loop() {
 
           String parameters = SERVER_PAGE + "send.php?from=" + NODE_NAME + "&to=" +
                               secondValue + "&type=" + type + "&end=" +
-                              isEnd + "&dial_id=" + dial_id + "&count=" + count;
+                              isEnd + "&dial_id=" + dial_id + "&count=" + count + "&network=" + NETWORK;
 
           http.begin(SERVER_URL, 80, parameters); //HTTP
           int httpCode2 = http.GET();
@@ -274,7 +294,7 @@ void loop() {
 
           String parameters = SERVER_PAGE + "send.php?from=" + NODE_NAME + "&to=" +
                               secondValue + "&type=" + type + "&end=" +
-                              isEnd + "&dial_id=" + dial_id + "&count=" + count;
+                              isEnd + "&dial_id=" + dial_id + "&count=" + count + "&network=" + NETWORK;
 
           http.begin(SERVER_URL, 80, parameters); //HTTP
           int httpCode2 = http.GET();
@@ -286,8 +306,6 @@ void loop() {
           int randNum = random (0, 100);
           if (randNum < 100) {
 
-            //            String whoToTalk = randNum % 2 == 0 ? "b":"c";
-            //            String whoToTalk = "b";
             String whoToTalk;
             do {
               whoToTalk = ALL_NODES[random(0, 2)];
@@ -297,7 +315,7 @@ void loop() {
 
             String parameters = SERVER_PAGE + "send.php?from=" + NODE_NAME + "&to=" +
                                 whoToTalk + "&type=" + "hello" + "&end=" +
-                                "0" + "&dial_id=" + dial_id + "&count=" + "0";
+                                "0" + "&dial_id=" + dial_id + "&count=" + "0" + + "&network=" + NETWORK;
 
             http.begin(SERVER_URL, 80, parameters); //HTTP
             int httpCode2 = http.GET();
@@ -309,11 +327,13 @@ void loop() {
 
             if (sendReturn != "Duplicate hello entry. Entry dropped." && httpCode2 == 200) {
               wtv020sd16p.playVoice(dial_id - 1);
+            }else {
+//              ESP.deepSleep(20 * 1000000);
+
+                delay(5000);
             }
 
-
           }
-
 
         }
       }
@@ -330,7 +350,7 @@ void loop() {
     counter = 0;
     USE_SERIAL.println(counter);
     digitalWrite(toATtiny, HIGH);
-    ESP.deepSleep(20 * 1000000);
+//    ESP.deepSleep(20 * 1000000);
   }
 
   //          USE_SERIAL.println("before sleep");
@@ -342,19 +362,5 @@ void loop() {
   
 }
 
-int dial_id_from_conversation(int numOfConversation) {
-
-  int result;
-
-  if (numOfConversation > 5) {
-    result = random(firstMsgIndex + 20, firstByeIndex);
-  } else if (numOfConversation > 2) {
-    result = random(firstMsgIndex + 10, firstMsgIndex + 20);
-  } else {
-    result = random(firstMsgIndex, firstMsgIndex + 10);
-  }
-
-  return result;
-}
 
 
