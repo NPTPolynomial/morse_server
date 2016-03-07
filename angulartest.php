@@ -188,30 +188,30 @@ function sendFromTo(from,to,type,end,network){
 
 <button onclick=sendFromTo('a','b','hello','0','1')>A1: Send Hello 0</button>
 <button onclick=sendFromTo('a','b','hello','1','1')>A1: Send Hello 1</button>
-<button onclick=sendFromTo('a','b','msg','0','1')>A1: Send MSG 0</button>
-<button onclick=sendFromTo('a','b','msg','1','1')>A1: Send MSG 1</button>
+<button onclick=sendFromTo('a','b','message','0','1')>A1: Send MSG 0</button>
+<button onclick=sendFromTo('a','b','message','1','1')>A1: Send MSG 1</button>
 <button onclick=sendFromTo('a','b','bye','0','1')>A1: Send Bye 0</button>
 <button onclick=sendFromTo('a','b','bye','1','1')>A1: Send Bye 1</button>
 <br />
 <button onclick=sendFromTo('b','a','hello','0','1')>B1: Send Hello 0</button>
 <button onclick=sendFromTo('b','a','hello','1','1')>B1: Send Hello 1</button>
-<button onclick=sendFromTo('b','a','msg','0','1')>B1: Send MSG 0</button>
-<button onclick=sendFromTo('b','a','msg','1','1')>B1: Send MSG 1</button>
+<button onclick=sendFromTo('b','a','message','0','1')>B1: Send MSG 0</button>
+<button onclick=sendFromTo('b','a','message','1','1')>B1: Send MSG 1</button>
 <button onclick=sendFromTo('b','a','bye','0','1')>B1: Send Bye 0</button>
 <button onclick=sendFromTo('b','a','bye','1','1')>B1: Send Bye 1</button>
 <br />
 <br />
 <button onclick=sendFromTo('a','b','hello','0','2')>A2: Send Hello 0</button>
 <button onclick=sendFromTo('a','b','hello','1','2')>A2: Send Hello 1</button>
-<button onclick=sendFromTo('a','b','msg','0','2')>A2: Send MSG 0</button>
-<button onclick=sendFromTo('a','b','msg','1','2')>A2: Send MSG 1</button>
+<button onclick=sendFromTo('a','b','message','0','2')>A2: Send MSG 0</button>
+<button onclick=sendFromTo('a','b','message','1','2')>A2: Send MSG 1</button>
 <button onclick=sendFromTo('a','b','bye','0','2')>A2: Send Bye 0</button>
 <button onclick=sendFromTo('a','b','bye','1','2')>A2: Send Bye 1</button>
 <br />
 <button onclick=sendFromTo('b','a','hello','0','2')>B2: Send Hello 0</button>
 <button onclick=sendFromTo('b','a','hello','1','2')>B2: Send Hello 1</button>
-<button onclick=sendFromTo('b','a','msg','0','2')>B2: Send MSG 0</button>
-<button onclick=sendFromTo('b','a','msg','1','2')>B2: Send MSG 1</button>
+<button onclick=sendFromTo('b','a','message','0','2')>B2: Send MSG 0</button>
+<button onclick=sendFromTo('b','a','message','1','2')>B2: Send MSG 1</button>
 <button onclick=sendFromTo('b','a','bye','0','2')>B2: Send Bye 0</button>
 <button onclick=sendFromTo('b','a','bye','1','2')>B2: Send Bye 1</button>
                                 
