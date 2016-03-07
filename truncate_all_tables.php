@@ -43,5 +43,5 @@ if($errors ==0){
 	exit;
 }
 
-
+$conn->close();
 ?>
