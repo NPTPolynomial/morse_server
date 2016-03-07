@@ -22,7 +22,17 @@ if(isset($_GET["lastmessage_number"])){
     $last_message_num = 0;
 }
 
-$sql = "SELECT * FROM board LEFT JOIN dialog ON board.dial_id = dialog.dial_id WHERE board_id > '$last_message_num'";
+
+if(isset($_GET["network"])){
+    $network = $_GET["network"];
+	$network = "AND network = '$network'";
+}else{
+
+    $network = "";
+}
+
+
+$sql = "SELECT * FROM board LEFT JOIN dialog ON board.dial_id = dialog.dial_id WHERE board_id > '$last_message_num' $network";
 
 $result = $conn->query($sql);
 
