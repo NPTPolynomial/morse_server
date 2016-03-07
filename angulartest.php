@@ -114,7 +114,7 @@ function sendFromTo(from,to,type,end,network){
 	
 	console.log("Entered sendFromTo: " + from +" "+ to +" "+ type +" "+ end +" "+ network);
 	dial_id = 1;
-	if(type=='msg'){
+	if(type=='message'){
 		dial_id = 9;
 	}else if(type=='bye'){
 		dial_id = 41;
