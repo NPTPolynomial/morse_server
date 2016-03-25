@@ -99,7 +99,7 @@ void setup() {
   //
   //  }
   delay(1000);
-  WiFiMulti.addAP("XPS_2G", "1985517000");
+  WiFiMulti.addAP("MORSE_AP", "morseesp8266");
 //  WiFiMulti.addAP("Eds-Studio-2ghz", "DesignStudio2015");
 
   pinMode(A0, INPUT);
