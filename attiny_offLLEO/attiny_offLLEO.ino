@@ -51,7 +51,7 @@ void loop() {
 
     sleep_mode(); //Go to sleep! MODE
   } else {
-    
+    digitalWrite(vccPin, HIGH);
   }
   //  if (val == HIGH) {
   //    digitalWrite(vccPin, LOW);
