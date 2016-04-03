@@ -210,22 +210,10 @@ void loop() {
           if (sendReturn != "Duplicate hello entry. Entry dropped." && httpCode2 == 200) {
             wtv020sd16p.playVoice(dial_id - 1);
 
-            delay(1000);
-            USE_SERIAL.println("I am playing");
-            delay(1000);
-            USE_SERIAL.println("I am playing");
-            delay(1000);
-            USE_SERIAL.println("I am playing");
-            delay(1000);
-            USE_SERIAL.println("I am playing");
-            delay(1000);
-            USE_SERIAL.println("I am playing");
-          }
+          } else {
+            digitalWrite(toATtiny, HIGH);
+           }
 
-
-          //          USE_SERIAL.println("before sleep");
-          //          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-          //          USE_SERIAL.println("after sleep");
 
         } else if (firstValue == "message") {
           USE_SERIAL.println("It worked. I have a message");
@@ -267,9 +255,9 @@ void loop() {
           if (sendReturn != "Duplicate hello entry. Entry dropped." && httpCode2 == 200) {
             wtv020sd16p.playVoice(dial_id - 1);
           }
-          //          USE_SERIAL.println("before sleep");
-          //          ESP.deepSleep(sleepTimeS * 1000000, WAKE_RF_DEFAULT);
-          //          USE_SERIAL.println("after sleep");
+          else {
+              digitalWrite(toATtiny, HIGH);
+            }
 
 
         }
@@ -329,8 +317,8 @@ void loop() {
               wtv020sd16p.playVoice(dial_id - 1);
             }else {
 //              ESP.deepSleep(20 * 1000000);
+                digitalWrite(toATtiny, HIGH);
 
-                delay(5000);
             }
 
           }
