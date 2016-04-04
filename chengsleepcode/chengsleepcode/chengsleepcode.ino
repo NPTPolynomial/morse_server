@@ -50,13 +50,15 @@ void loop() {
   
   if(digitalRead(signalPin) == HIGH)
   {
-    while(random(2) == 0){
+    int r = 1;
+    while(r > 0){
+      ADCSRA &= ~(1<<ADEN); //Disable ADC, saves ~230uA
       for(int i =0; i < 60; i++){
-        ADCSRA &= ~(1<<ADEN); //Disable ADC, saves ~230uA
         setup_watchdog(6); //Setup watchdog to go off after 1sec
         sleep_mode(); //Go to sleep! Wake up 1sec later and check water
         digitalWrite(vccPin, LOW);
       }
+      r = random(2);
     }
   }
 

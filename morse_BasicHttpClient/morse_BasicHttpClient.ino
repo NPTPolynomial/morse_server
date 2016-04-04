@@ -29,18 +29,19 @@ Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
 //String SERVER_URL = "192.168.1.242";
 
 //String SERVER_URL = "192.168.0.106";
-//String SERVEL_URL = "192.168.1.208";
+String SERVER_URL = "192.168.1.208";
 
-String SERVER_URL = "192.168.1.19";
+//String SERVER_URL = "192.168.1.19";
 String SERVER_PAGE = "/morse_server/";
 
 //int unusedPin = 50;
 
-String NODE_NAME = "b";
+String NODE_NAME = "a";
 String NETWORK = "1";
-String ALL_NODES[2] = {"a", "b"};
+const int NUM_NODES = 2;
+String ALL_NODES[] = {"a", "b"};
 
-String receiveInstructionURL = SERVER_PAGE + "receive.php?node=" + NODE_NAME+NETWORK;
+String receiveInstructionURL = SERVER_PAGE + "receive.php?node=" + NODE_NAME + NETWORK;
 
 int firstMsgIndex = 9;
 int firstByeIndex = 41;
@@ -100,7 +101,7 @@ void setup() {
   //  }
   delay(1000);
   WiFiMulti.addAP("MORSE_AP", "morseesp8266");
-//  WiFiMulti.addAP("Eds-Studio-2ghz", "DesignStudio2015");
+  //  WiFiMulti.addAP("Eds-Studio-2ghz", "DesignStudio2015");
 
   pinMode(A0, INPUT);
 
@@ -117,18 +118,8 @@ void loop() {
   if ((WiFiMulti.run() == WL_CONNECTED)
       && counter < minProtectionTime
       && digitalRead(busyPin) == LOW
-     ) {
-
-    //    for (int i = 0; i < 20; i++) {
-    //      digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    //      // but actually the LED is on; this is because
-    //      // it is acive low on the ESP-01)
-    //      delay(500);                      // Wait for a second
-    //      digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
-    //
-    //
-    //      delay(500);
-    //    }
+     )
+  {
 
 
     prevMillis = millis();
@@ -199,7 +190,7 @@ void loop() {
           String parameters = SERVER_PAGE + "send.php?from=" + NODE_NAME + "&to=" +
                               secondValue + "&type=" + type + "&end=" +
                               isEnd + "&dial_id=" + dial_id + "&count=" + count + "&network=" + NETWORK;
-                              
+
           http.begin(SERVER_URL, 80, parameters); //HTTP
           int httpCode2 = http.GET();
           USE_SERIAL.println(parameters);
@@ -212,7 +203,7 @@ void loop() {
 
           } else {
             digitalWrite(toATtiny, HIGH);
-           }
+          }
 
 
         } else if (firstValue == "message") {
@@ -256,8 +247,8 @@ void loop() {
             wtv020sd16p.playVoice(dial_id - 1);
           }
           else {
-              digitalWrite(toATtiny, HIGH);
-            }
+            digitalWrite(toATtiny, HIGH);
+          }
 
 
         }
@@ -269,7 +260,6 @@ void loop() {
           int dial_id;
           String type;
           int isEnd;
-
 
           // time to message back
           dial_id = random(firstByeIndex, totalAudio + 1);
@@ -295,8 +285,10 @@ void loop() {
           if (randNum < 100) {
 
             String whoToTalk;
+            USE_SERIAL.print("+++++++++++++");
+            USE_SERIAL.println(sizeof(ALL_NODES));
             do {
-              whoToTalk = ALL_NODES[random(0, 2)];
+              whoToTalk = ALL_NODES[random(0, NUM_NODES)];
             } while (NODE_NAME == whoToTalk);
 
             int dial_id = random(1, firstMsgIndex);
@@ -315,9 +307,9 @@ void loop() {
 
             if (sendReturn != "Duplicate hello entry. Entry dropped." && httpCode2 == 200) {
               wtv020sd16p.playVoice(dial_id - 1);
-            }else {
-//              ESP.deepSleep(20 * 1000000);
-                digitalWrite(toATtiny, HIGH);
+            } else {
+              //              ESP.deepSleep(20 * 1000000);
+              digitalWrite(toATtiny, HIGH);
 
             }
 
@@ -338,7 +330,7 @@ void loop() {
     counter = 0;
     USE_SERIAL.println(counter);
     digitalWrite(toATtiny, HIGH);
-//    ESP.deepSleep(20 * 1000000);
+    //    ESP.deepSleep(20 * 1000000);
   }
 
   //          USE_SERIAL.println("before sleep");
@@ -347,7 +339,7 @@ void loop() {
 
 
   delay(1500);
-  
+
 }
 
 
