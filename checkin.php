@@ -88,6 +88,7 @@ function numberOfNodesStillActiveExceptFor($node, $conn){
 			}
 		}
 		
+		//if returnNumber and mysqli_num_rows == the same, then return A
 		return $returnNumber;
 	}else{
 		//no nodes
