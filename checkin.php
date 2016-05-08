@@ -48,6 +48,8 @@ function isABWithInTime($a, $b, $hour_interval){
 	}
 }
 
+////Inserts timestamp for specifided node
+////RETURN: true if success, false if failed.
 function insertAndUpdateTimestamp($node, $conn){
 	
 	echo "Doing time stamping<br />";
@@ -65,7 +67,7 @@ function insertAndUpdateTimestamp($node, $conn){
 }
 
 
-////returns the number of nodes still active.
+////returns the number of nodes still active. Except for the node that called this function.
 function numberOfNodesStillActiveExceptFor($node, $conn){
 	echo "Starting numberOfNodesStillActiveExceptFor<br />";
 	$getTimeStampOfNodeQuery = "SELECT * FROM central_hub WHERE node != '$node' ";
@@ -112,7 +114,7 @@ function setGlobalVar($var, $value, $conn){
 
 
 
-///RETURN: value of global variable, -1 if could not be found.
+///RETURN: value of global variable, (-1) if could not be found.
 function getGlobalVar($var, $conn){
 	$getGlobalVarQuery = "SELECT * FROM `central_global_vars` WHERE `global_var` = '$var' ";
 	$getGlobalVar = mysqli_query($conn, $getGlobalVarQuery);
@@ -125,6 +127,24 @@ function getGlobalVar($var, $conn){
 	}else{
 		return -1;
 	}
+}
+
+
+//RETURN: total number of nodes in the global hub. (-1) if the command fails.
+function getTotalNumberOfNodes($conn){
+	$getTotalNumberOfNodesQuery = "SELECT COUNT(*) AS `count` FROM `central_hub`";
+	$getTotalNumberOfNodes = mysqli_query($conn, $getTotalNumberOfNodes);
+	if($getTotalNumberOfNodes){
+		
+		while($row = mysqli_fetch_array($getTotalNumberOfNodes)){
+			return $row['count'];
+		}
+		
+	}else{
+		return -1;
+	}
+	
+	
 }
 
 
