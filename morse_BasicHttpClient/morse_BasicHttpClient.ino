@@ -50,6 +50,7 @@ int counter;
 const int minProtectionTime = 15000; // 1500 delay * 10 seconds
 
 ESP8266WiFiMulti WiFiMulti;
+ESP8266WiFiClass test;
 
 unsigned long prevMillis = 0;
 
@@ -114,6 +115,8 @@ void loop() {
   USE_SERIAL.print("busy pin: ");
   USE_SERIAL.println(digitalRead(busyPin));
 
+  USE_SERIAL.println(test.SSID());
+  USE_SERIAL.println(test.RSSI());
 
   if ((WiFiMulti.run() == WL_CONNECTED)
       && counter < minProtectionTime
