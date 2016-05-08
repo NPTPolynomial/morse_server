@@ -98,6 +98,36 @@ function numberOfNodesStillActiveExceptFor($node, $conn){
 }
 
 
+///inserts the new global variable into database, or updates if already exists
+///RETURN: True if successful, and FALSE if failed. 
+function setGlobalVar($var, $value, $conn){
+	$setGlobalVarQuery = "INSERT INTO `central_global_vars` (`global_var`, `value`) VALUES ('$var','$value') ON DUPLICATE KEY UPDATE `value` = '$value' ";
+	$setGlobalVar = mysqli_query($conn, $setGlobalVarQuery);
+	if($setGlobalVar){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+
+
+///RETURN: value of global variable, -1 if could not be found.
+function getGlobalVar($var, $conn){
+	$getGlobalVarQuery = "SELECT * FROM `central_global_vars` WHERE `global_var` = '$var' ";
+	$getGlobalVar = mysqli_query($conn, $getGlobalVarQuery);
+	if($getGlobalVar){
+		
+		while($row = mysqli_fetch_array($getGlobalVar)){
+			return $row['value'];
+		}
+		
+	}else{
+		return -1;
+	}
+}
+
+
 if($DEBUG) echo "I got node:" . $node. "<br />";
 
 //Special Variables:
