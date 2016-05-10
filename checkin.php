@@ -146,6 +146,7 @@ function getGlobalVar($var, $conn){
 	}
 }
 
+
 //get current timestamp of the node
 //RETURNS: timestamp of node, or (-1) if node is not found.
 function getCurrentTimestampForNode($node, $conn){
