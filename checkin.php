@@ -319,6 +319,35 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 
 }
 
+//Returns a concatenated the english string version in front of the coded string.
+function messageToString($codeMsg){
+	$returnString = "";
+	
+	if($codeMsg == "I,0,0"){
+		$returnString = "I exists!,".$codeMsg;
+	}elseif($codeMsg == "W,0,0"){
+		$returnString = "We exists!,".$codeMsg;
+	}elseif($codeMsg == "W,1,0"){
+		$returnString = "Where did you go?,".$codeMsg;
+	}elseif($codeMsg == "W,2,1"){
+		$returnString = "We all exist, what else is there?,".$codeMsg;
+	}elseif($codeMsg == "A,0,0"){
+		$returnString = "We all exist!,".$codeMsg;
+	}elseif($codeMsg == "A,1,0"){
+		$returnString = "We all exist!,".$codeMsg;
+	}elseif($codeMsg == "A,2,0"){
+		$returnString = "We all exist, what else is there?,".$codeMsg;
+	}elseif($codeMsg == "A,2,1"){
+		$returnString = "We all exist, what else is there?,".$codeMsg;
+	}elseif($codeMsg == "M,1,1"){
+		$returnString = "I am back!,".$codeMsg;
+	}else{
+		$returnString = "????,".$codeMsg;
+	}
+	
+	return $returnString;
+}
+
 
 if($DEBUG) echo "I got node:" . $node. "<br />";
 
@@ -329,7 +358,9 @@ if($node){
 	//echo "currentTimeNow: " . $currentTimeNow->format('Y-m-d H:i') . "<br />";
 	$returnMessage = "";
 	$returnMessage = getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES);
-	echo $returnMessage;
+	//echo $returnMessage;
+	//echo "<br />";
+	echo messageToString($returnMessage);
 	
 	
 }
