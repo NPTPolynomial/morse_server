@@ -269,7 +269,7 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 			
 		}
 		
-		//if at level 1, all present, but no one went missing yet
+		//if at level 1, all present, someone went missing already
 		elseif($currentMissing == 1){
 			setGlobalVar("level", "2", $conn);
 			insertAndUpdateTimestamp($node, $conn);
@@ -279,7 +279,7 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 		
 	}
 	
-	//if more than 1 node is active
+	//if at level 0, and if more than 1 node is active
 	if($numOfActiveNodes > 1 && $currentLevel == 0){
 		insertAndUpdateTimestamp($node, $conn);
 		return "W,$currentLevel,$currentMissing";
@@ -304,13 +304,13 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 		
 	}
 	
-	//if more than 1 node is active, and level is 1, that means someone is missing.
+	//if all nodes are active, and level is 2, that means ... (to be decided) temp: what else is there?
 	if($currentLevel == 2 && $numOfActiveNodes >= $totalNumOfNodes){
 		insertAndUpdateTimestamp($node, $conn);
 		return "A,$currentLevel,$currentMissing";
 	}
 	
-	//if more than 1 node is active, and level is 1, that means someone is missing.
+	//if more than 1 node is active, and level is 2, that means ... (to be decided) temp: what else is there?
 	if($currentLevel == 2 && $numOfActiveNodes > 0){
 		insertAndUpdateTimestamp($node, $conn);
 		return "W,$currentLevel,$currentMissing";
