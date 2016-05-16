@@ -319,7 +319,7 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 
 }
 
-//Returns a concatenated the english string version in front of the coded string.
+//Returns a concatenated english string version in front of the coded string.
 function messageToString($codeMsg){
 	$returnString = "";
 	
