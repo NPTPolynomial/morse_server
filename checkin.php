@@ -269,7 +269,7 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 			
 		}
 		
-		//if at level 1, all present, but no one went missing yet
+		//if at level 1, all present, someone went missing already
 		elseif($currentMissing == 1){
 			setGlobalVar("level", "2", $conn);
 			insertAndUpdateTimestamp($node, $conn);
@@ -279,7 +279,7 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 		
 	}
 	
-	//if more than 1 node is active
+	//if at level 0, and if more than 1 node is active
 	if($numOfActiveNodes > 1 && $currentLevel == 0){
 		insertAndUpdateTimestamp($node, $conn);
 		return "W,$currentLevel,$currentMissing";
@@ -304,19 +304,48 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 		
 	}
 	
-	//if more than 1 node is active, and level is 1, that means someone is missing.
+	//if all nodes are active, and level is 2, that means ... (to be decided) temp: what else is there?
 	if($currentLevel == 2 && $numOfActiveNodes >= $totalNumOfNodes){
 		insertAndUpdateTimestamp($node, $conn);
 		return "A,$currentLevel,$currentMissing";
 	}
 	
-	//if more than 1 node is active, and level is 1, that means someone is missing.
+	//if more than 1 node is active, and level is 2, that means ... (to be decided) temp: what else is there?
 	if($currentLevel == 2 && $numOfActiveNodes > 0){
 		insertAndUpdateTimestamp($node, $conn);
 		return "W,$currentLevel,$currentMissing";
 	}
 	
 
+}
+
+//Returns a concatenated english string version in front of the coded string.
+function messageToString($codeMsg){
+	$returnString = "";
+	
+	if($codeMsg == "I,0,0"){
+		$returnString = "I exists!,".$codeMsg;
+	}elseif($codeMsg == "W,0,0"){
+		$returnString = "We exists!,".$codeMsg;
+	}elseif($codeMsg == "W,1,0"){
+		$returnString = "Where did you go?,".$codeMsg;
+	}elseif($codeMsg == "W,2,1"){
+		$returnString = "We all exist, what else is there?,".$codeMsg;
+	}elseif($codeMsg == "A,0,0"){
+		$returnString = "We all exist!,".$codeMsg;
+	}elseif($codeMsg == "A,1,0"){
+		$returnString = "We all exist!,".$codeMsg;
+	}elseif($codeMsg == "A,2,0"){
+		$returnString = "We all exist, what else is there?,".$codeMsg;
+	}elseif($codeMsg == "A,2,1"){
+		$returnString = "We all exist, what else is there?,".$codeMsg;
+	}elseif($codeMsg == "M,1,1"){
+		$returnString = "I am back!,".$codeMsg;
+	}else{
+		$returnString = "????,".$codeMsg;
+	}
+	
+	return $returnString;
 }
 
 
@@ -329,7 +358,9 @@ if($node){
 	//echo "currentTimeNow: " . $currentTimeNow->format('Y-m-d H:i') . "<br />";
 	$returnMessage = "";
 	$returnMessage = getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES);
-	echo $returnMessage;
+	//echo $returnMessage;
+	//echo "<br />";
+	echo messageToString($returnMessage);
 	
 	
 }
