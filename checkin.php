@@ -324,23 +324,23 @@ function messageToString($codeMsg){
 	$returnString = "";
 	
 	if($codeMsg == "I,0,0"){
-		$returnString = "I exists!,".$codeMsg;
+		$returnString = "i exists,".$codeMsg;
 	}elseif($codeMsg == "W,0,0"){
-		$returnString = "We exists!,".$codeMsg;
+		$returnString = "we exists,".$codeMsg;
 	}elseif($codeMsg == "W,1,0"){
-		$returnString = "Where did you go?,".$codeMsg;
+		$returnString = "where did you go,".$codeMsg;
 	}elseif($codeMsg == "W,2,1"){
-		$returnString = "We all exist, what else is there?,".$codeMsg;
+		$returnString = "we all exist, what else is there,".$codeMsg;
 	}elseif($codeMsg == "A,0,0"){
-		$returnString = "We all exist!,".$codeMsg;
+		$returnString = "we all exist,".$codeMsg;
 	}elseif($codeMsg == "A,1,0"){
-		$returnString = "We all exist!,".$codeMsg;
+		$returnString = "we all exist,".$codeMsg;
 	}elseif($codeMsg == "A,2,0"){
-		$returnString = "We all exist, what else is there?,".$codeMsg;
+		$returnString = "we all exist, what else is there,".$codeMsg;
 	}elseif($codeMsg == "A,2,1"){
-		$returnString = "We all exist, what else is there?,".$codeMsg;
+		$returnString = "we all exist, what else is there,".$codeMsg;
 	}elseif($codeMsg == "M,1,1"){
-		$returnString = "I am back!,".$codeMsg;
+		$returnString = "i am back,".$codeMsg;
 	}else{
 		$returnString = "????,".$codeMsg;
 	}
