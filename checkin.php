@@ -329,6 +329,8 @@ function messageToString($codeMsg){
 		$returnString = "we exists,".$codeMsg;
 	}elseif($codeMsg == "W,1,0"){
 		$returnString = "where did you go,".$codeMsg;
+	}elseif($codeMsg == "W,1,1"){
+		$returnString = "where did you go,".$codeMsg;
 	}elseif($codeMsg == "W,2,1"){
 		$returnString = "we all exist, what else is there,".$codeMsg;
 	}elseif($codeMsg == "A,0,0"){
@@ -336,9 +338,9 @@ function messageToString($codeMsg){
 	}elseif($codeMsg == "A,1,0"){
 		$returnString = "we all exist,".$codeMsg;
 	}elseif($codeMsg == "A,2,0"){
-		$returnString = "we all exist, what else is there,".$codeMsg;
+		$returnString = "we all exist what else is there,".$codeMsg;
 	}elseif($codeMsg == "A,2,1"){
-		$returnString = "we all exist, what else is there,".$codeMsg;
+		$returnString = "we all exist what else is there,".$codeMsg;
 	}elseif($codeMsg == "M,1,1"){
 		$returnString = "i am back,".$codeMsg;
 	}else{
