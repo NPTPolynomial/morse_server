@@ -5,19 +5,63 @@
 
 #include <ESP8266HTTPClient.h>
 
-#include <Wtv020sd16p.h>
-
-int resetPin = 5; // The pin number of the reset pin.
-int clockPin = 0; // The pin number of the clock pin.
-int dataPin = 4; // The pin number of the data pin.
-int busyPin = 13; // The pin number of the busy pin.
 int toATtiny = 12;
 
-Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
+//Wtv020sd16p wtv020sd16p(resetPin, clockPin, dataPin, busyPin);
 
 #define USE_SERIAL Serial
 #include <string.h>
 #define MAX_STRING_LEN 20
+
+String str = "hello";
+#define buffer_length 13
+char charBuf[buffer_length];
+int intBuf[buffer_length];
+
+#define speakerPin 13
+#define pitch 440
+#define bpm 100
+///long bpmdelay = 0;
+
+//Within international morse code the maximum length of a character is 5 'notes'
+//The last note of a character is a stop symbol -> therefore length + 1
+#define character_length 6
+String alphabet_substr; //get the di's and dah's from the alphabet_strings.
+
+String alphabet[] = {
+  "300003",   //nothing (void)
+  "123003",   //a
+  "211133",   //b
+  "212133",   //c
+  "211303",   //d
+  "130003",   //e
+  "112133",   //f
+  "221303",   //g
+  "111133",   //h
+  "113003",   //i
+  "122233",   //j
+  "212303",   //k
+  "121133",   //l
+  "223003",   //m
+  "213003",   //n
+  "222303",   //o
+  "122133",   //p
+  "221233",   //q
+  "121303",   //r
+  "111303",   //s
+  "230003",   //t
+  "112303",   //u
+  "111233",   //v
+  "122303",   //w
+  "211233",   //x
+  "212233",   //y
+  "221133",   //z
+};
+
+//char to int ASCII conversion (to make sure it matches up with alphabet[])
+#define ASCIIconv 96
+//skip if it is this number for it is a space bar
+#define space_char 32
 
 //String SERVER_URL = "192.168.1.242";
 
@@ -45,7 +89,7 @@ unsigned long prevMillis = 0;
 const int sleepTimeS = 10;
 
 void setup() {
-  wtv020sd16p.reset();
+
 
   counter = 0;
   pinMode(toATtiny, OUTPUT);
@@ -58,6 +102,7 @@ void setup() {
   USE_SERIAL.println();
 
   pinMode(BUILTIN_LED, OUTPUT);
+  pinMode(speakerPin, OUTPUT);
 
   delay(1000);
   WiFiMulti.addAP("eds2g", "DesignStudio2016");
@@ -68,8 +113,6 @@ void setup() {
 
 void loop() {
 
-  USE_SERIAL.println(test.SSID());
-  USE_SERIAL.println(test.RSSI());
 
   if ((WiFiMulti.run() == WL_CONNECTED)
       && counter < minProtectionTime)
@@ -109,8 +152,12 @@ void loop() {
         USE_SERIAL.println("thirdValue: " + thirdValue);
         USE_SERIAL.println("forthValue: " + forthValue);
         USE_SERIAL.println("fifthValue: " + fifthValue);
+        USE_SERIAL.println("RSSI" + test.RSSI());
 
         USE_SERIAL.println(payload);
+
+        str = firstValue;
+        talk(str);
       }
     } else {
       USE_SERIAL.print("[HTTP] GET... failed, no connection or no HTTP server\n");
@@ -127,3 +174,127 @@ void loop() {
   }
   delay(1500);
 }
+
+void string_to_char() {
+
+  str.toCharArray(charBuf, buffer_length);
+
+  for (int i = 0; i < buffer_length; i++) {
+    Serial.print(charBuf[i]);
+    Serial.print("\t");
+  }
+  Serial.println();
+  Serial.println();
+  delay(100);
+
+}
+
+
+
+void char_to_int() {
+  //a char to a ASCII = 97 -> a==0
+
+  for (int i = 0; i < buffer_length; i++) {
+    intBuf[i] = (int)charBuf[i];
+    Serial.print(intBuf[i]);
+    Serial.print("\t");
+  }
+  Serial.println();
+  Serial.println();
+
+}
+
+
+
+void int_to_morse() {
+
+  for (int i = 0; i < buffer_length; i++) {
+    //0 is end of the sentence
+    if (intBuf[i] == 0) {
+      Serial.print(" || ");
+      break;
+    }
+    if (intBuf[i] == space_char) {
+      Serial.print(" / ");
+      silence(4);
+    }
+    else {
+      Serial.print(".");
+      Serial.print(intBuf[i] - ASCIIconv);
+      morse_to_sound((intBuf[i] - ASCIIconv));
+    }
+  }
+
+}
+
+
+
+void morse_to_sound(int q) {
+
+  //run through the digits of a character within the morse alphabet
+  for (int i = 0; i < character_length; i++) {
+    int y;
+    alphabet_substr = alphabet[q].substring(i, i + 1);  //get the digit
+    y = alphabet_substr.toInt(); //store the digit into an int for comparision.
+
+    /* WHAT y MEANS:
+     * 0 = _ (single silence)
+     * 1 = di (1 time note)
+     * 2 = daaah (3 times the length of di)
+     * 3 = end of character (2 times silence)
+     * 4 = end of word (3 times silence)
+     */
+
+    if (y == 3) {
+      //end of the current character
+      silence(2);
+      break;
+    }
+
+    if (y == 1) {
+      di();
+      silence(1);
+    }
+
+    if (y == 2) {
+      dah();
+      silence(1);
+    }
+
+  }
+}
+
+void talk(String q) {
+  str = q;
+  string_to_char();
+  char_to_int();
+  int_to_morse();
+}
+
+void di() {
+  //play a short pulse
+  
+//  digitalWrite(speakerPin, LOW);
+  analogWrite(speakerPin, 255);
+  delay(bpm);
+}
+
+void dah() {
+  //play a long pulse
+  
+
+//  digitalWrite(speakerPin, LOW);
+  analogWrite(speakerPin, 255);
+  delay(bpm*3);
+}
+
+void silence(int i) {
+  //wait a while.
+  //play a short pulse
+ 
+
+//  digitalWrite(speakerPin, HIGH);
+  analogWrite(speakerPin, 0);
+  delay(bpm*i);
+}
+
