@@ -351,6 +351,23 @@ function messageToString($codeMsg){
 }
 
 
+//SENDS returnmessage to the autoupdating board
+function sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn){
+	
+	//echo "setGlobalVar($var, $value).... <br />";
+	$currentT = $currentTimeNow->format('Y-m-d H:i');
+	
+	$sendMessageToBoardQuery = "INSERT INTO `board` (`datetime`, `from`, `to`, `type`, `network`) VALUES ('$currentT','$node', 'ALL', '$returnMessage', 3)";
+	$sendMessageToBoard = mysqli_query($conn, $sendMessageToBoardQuery);
+	if($sendMessageToBoard){
+		return true;
+	}else{
+		return false;
+	}
+	
+}
+
+
 if($DEBUG) echo "I got node:" . $node. "<br />";
 
 
@@ -362,7 +379,9 @@ if($node){
 	$returnMessage = getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES);
 	//echo $returnMessage;
 	//echo "<br />";
-	echo messageToString($returnMessage);
+	$returnMessage = messageToString($returnMessage);
+	echo $returnMessage;
+	sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn);
 	
 	
 }
