@@ -239,6 +239,8 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 	if(!(isset($numOfActiveNodes)) || $numOfActiveNodes == -1 || $numOfActiveNodes <= 1 || $numOfActiveNodes == null){
 		setGlobalVar("level", "0", $conn);
 		setGlobalVar("missing", "0", $conn);
+		setGlobalVar("wifi_sig_low", -55, $conn);
+		setGlobalVar("wifi_sig_high", -40, $conn);
 		insertAndUpdateTimestamp($node, $conn);
 		return "I,0,0";
 	}
