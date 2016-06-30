@@ -11,8 +11,10 @@ $password = "Morse!23";
 $db = "morse";
 
 $DEBUG = 0;
-$TIME_INTERVAL_FOR_NODES = '2';
-$node_color = "R";
+
+//'+'.$hour_interval.' hours'
+$TIME_INTERVAL_FOR_NODES = '+2 minutes';
+
 
 
 // Create connection

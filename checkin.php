@@ -2,6 +2,13 @@
 
 require 'config.php';
 
+///////////////////
+// Local Variables
+
+$node_color = "R";
+
+
+
 // Gather the variables
 
 if(isset($_GET["node"])){
@@ -45,7 +52,7 @@ function isABWithInTime($a, $b, $hour_interval){
 	//echo "isABWithInTime: $aStr, $bStr, $hour_interval <br />";
 	
 	
-	$timeInterval = '+'.$hour_interval.' hours';
+	$timeInterval = $hour_interval;
 	$newdate = strtotime ( $timeInterval , strtotime ( $a->format('Y-m-d H:i') ) ) ;
 	$newdate = date ( 'Y-m-d H:i' , $newdate );
 	
