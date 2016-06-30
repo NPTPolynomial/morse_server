@@ -1,29 +1,19 @@
 <?php
-date_default_timezone_set("America/Vancouver");
 
-$servername = "localhost";
-$port = 8889;
-$username = "root";
-$password = "root";
-$db = "morse";
-
-$DEBUG = 0;
-$TIME_INTERVAL_FOR_NODES = '2';
-
-
-
-// Create connection
-
-$conn = new mysqli($servername, $username, $password, $db, $port);
-
-if(isset($conn->connection_error)){
-    die("Connection failed: " . $conn->connect_error);
-}
+require 'config.php';
 
 // Gather the variables
 
 if(isset($_GET["node"])){
     $node = $_GET["node"];
+	if($node == "a"){
+		$node_color = "R";
+	}else if($node == "b"){
+		$node_color = "B";
+	}else if($node == "c"){
+		$node_color = "Y";
+	}
+		
 }else{
     $node = 0;
 }
