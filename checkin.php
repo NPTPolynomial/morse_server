@@ -28,6 +28,12 @@ if(isset($_GET["node"])){
     $node = 0;
 }
 
+//wifi 20max, 40min
+if(isset($_GET["wifi_sig"])){
+    $wifi_sig = $_GET["wifi_sig"];
+}else{
+    $wifi_sig = -30;
+}
 
 ///Returns true if A (DateTime) and B (DateTime) are within time interval (String time). (ie, A has not expired yet.
 ///Example1: $a = new DateTime('2016-05-05 03:44');
@@ -233,6 +239,8 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 	if(!(isset($numOfActiveNodes)) || $numOfActiveNodes == -1 || $numOfActiveNodes <= 1 || $numOfActiveNodes == null){
 		setGlobalVar("level", "0", $conn);
 		setGlobalVar("missing", "0", $conn);
+		setGlobalVar("wifi_sig_low", -55, $conn);
+		setGlobalVar("wifi_sig_high", -40, $conn);
 		insertAndUpdateTimestamp($node, $conn);
 		return "I,0,0";
 	}
@@ -252,29 +260,33 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 	//Level 1, and if all nodes are active
 	if($currentLevel == 1 && $numOfActiveNodes >= $totalNumOfNodes){
 	
-		//if at level 1, all present, but no one went missing yet
-		if($currentMissing == 0){
-			
-			//if that node comes back, then send them a M, else send a W for every else.
-			if(getAmIMissingNode($node, $conn, $TIME_INTERVAL_FOR_NODES)){
-				setGlobalVar("missing", "1", $conn);
-				insertAndUpdateTimestamp($node, $conn);
-				return "M,$currentLevel,1";
-			}else{
-				//echo "failed missing node test <br />";
-			
-				insertAndUpdateTimestamp($node, $conn);
-				return "A,$currentLevel,$currentMissing";
-			}
-			
-		}
-		
-		//if at level 1, all present, someone went missing already
-		elseif($currentMissing == 1){
-			setGlobalVar("level", "2", $conn);
-			insertAndUpdateTimestamp($node, $conn);
-			return "A,2,$currentMissing";
-		}
+		// //if at level 1, all present, but no one went missing yet
+// 		if($currentMissing == 0){
+//
+// 			//if that node comes back, then send them a M, else send a W for every else.
+// 			if(getAmIMissingNode($node, $conn, $TIME_INTERVAL_FOR_NODES)){
+// 				setGlobalVar("missing", "1", $conn);
+// 				insertAndUpdateTimestamp($node, $conn);
+// 				return "M,$currentLevel,1";
+// 			}else{
+// 				//echo "failed missing node test <br />";
+//
+// 				insertAndUpdateTimestamp($node, $conn);
+// 				return "A,$currentLevel,$currentMissing";
+// 			}
+//
+// 		}
+//
+// 		//if at level 1, all present, someone went missing already
+// 		elseif($currentMissing == 1){
+// 			setGlobalVar("level", "2", $conn);
+// 			insertAndUpdateTimestamp($node, $conn);
+// 			return "A,2,$currentMissing";
+// 		}
+
+
+		insertAndUpdateTimestamp($node, $conn);
+		return "A,$currentLevel,$currentMissing";
 	
 		
 	}
@@ -290,30 +302,51 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 	if($numOfActiveNodes > 1 && $currentLevel == 1){
 		
 		
-		//if that node comes back, then send them a M, else send a W for every else.
-		if(getAmIMissingNode($node, $conn, $TIME_INTERVAL_FOR_NODES)){
-			setGlobalVar("missing", "1", $conn);
-			insertAndUpdateTimestamp($node, $conn);
-			return "M,$currentLevel,1";
-		}else{
-			//echo "failed missing node test2 <br />";
-			
-			insertAndUpdateTimestamp($node, $conn);
-			return "W,$currentLevel,$currentMissing";
-		}
+		// //if that node comes back, then send them a M, else send a W for every else.
+// 		if(getAmIMissingNode($node, $conn, $TIME_INTERVAL_FOR_NODES)){
+// 			setGlobalVar("missing", "1", $conn);
+// 			insertAndUpdateTimestamp($node, $conn);
+// 			return "M,$currentLevel,1";
+// 		}else{
+// 			//echo "failed missing node test2 <br />";
+//
+// 			insertAndUpdateTimestamp($node, $conn);
+// 			return "W,$currentLevel,$currentMissing";
+// 		}
+
+
+		//NEW STUFF
+		//A node has gone missing, set global missing variable to 1
+		setGlobalVar("missing", "1", $conn);
+		setGlobalVar("level", "2", $conn);
+		insertAndUpdateTimestamp($node, $conn);
+		
+		return "S,$currentLevel,$currentMissing";
+		
+
+
 		
 	}
 	
-	//if all nodes are active, and level is 2, that means ... (to be decided) temp: what else is there?
-	if($currentLevel == 2 && $numOfActiveNodes >= $totalNumOfNodes){
+	// //if all nodes are active, and level is 2, that means ... (to be decided) temp: what else is there?
+	// if($currentLevel == 2 && $numOfActiveNodes >= $totalNumOfNodes){
+	// 	insertAndUpdateTimestamp($node, $conn);
+	// 	return "A,$currentLevel,$currentMissing";
+	// }
+	
+	//if more than 1 node is active, and level is 2, that means ... Report strength and go to level 3.
+	if($currentLevel == 2 && $numOfActiveNodes > 1){
+		setGlobalVar("level", "3", $conn);//strength level.
 		insertAndUpdateTimestamp($node, $conn);
-		return "A,$currentLevel,$currentMissing";
+		return "T,$currentLevel,$currentMissing";
 	}
 	
-	//if more than 1 node is active, and level is 2, that means ... (to be decided) temp: what else is there?
-	if($currentLevel == 2 && $numOfActiveNodes > 0){
+	
+	//if more than 1 node is active, and level is 2, that means ... Report strength and go to level 3.
+	if($currentLevel == 3 && $numOfActiveNodes > 1){
+		//setGlobalVar("level", "4", $conn);//strength level.
 		insertAndUpdateTimestamp($node, $conn);
-		return "W,$currentLevel,$currentMissing";
+		return "N,$currentLevel,$currentMissing";
 	}
 	
 
@@ -341,12 +374,22 @@ function messageToString($codeMsg){
 		$returnString = "we all exist what else is there,".$codeMsg;
 	}elseif($codeMsg == "A,2,1"){
 		$returnString = "we all exist what else is there,".$codeMsg;
-	}elseif($codeMsg == "M,1,1"){
-		$returnString = "i am back,".$codeMsg;
+	}elseif($codeMsg == "S,1,0"){
+		$returnString = "search,".$codeMsg;
+	}elseif($codeMsg == "T,2,0"){
+		$returnString = "strength,".$codeMsg;
+	}elseif($codeMsg == "T,2,1"){
+		$returnString = "strength,".$codeMsg;
+	}elseif($codeMsg == "N,3,0"){
+		$returnString = "network,".$codeMsg;
+	}elseif($codeMsg == "N,3,1"){
+		$returnString = "network,".$codeMsg;
 	}else{
 		$returnString = "????,".$codeMsg;
 	}
-	
+	//S,1,0
+	//T,2,1
+	//N,3,1
 	return $returnString;
 }
 
@@ -368,6 +411,51 @@ function sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn){
 }
 
 
+//Update min and max for the wifi signals record
+function updateMinMaxWifiSignals($signal, $conn){
+	
+	$wifi_sig_low = getGlobalVar("wifi_sig_low", $conn);
+	$wifi_sig_high = getGlobalVar("wifi_sig_high", $conn);
+
+	//if it is less than min, update the min
+	if($signal < $wifi_sig_low){
+		//update the min
+		setGlobalVar("wifi_sig_low", $signal, $conn);
+		return "low";
+	}
+	
+	
+	
+	//elseif it is more than the max
+	if($signal > $wifi_sig_high){
+		//update the max
+		setGlobalVar("wifi_sig_high", $signal, $conn);
+		return "high";
+	}
+	
+	
+	$difference = abs($wifi_sig_high - $wifi_sig_low);
+	$difference_slots = $difference/3;
+	
+	if($signal <= ($wifi_sig_low + $difference_slots)){
+		return "low";
+	}
+	
+	if($signal >= $wifi_sig_low + $difference_slots && $signal < $wifi_sig_low + 2*$difference_slots){
+		return "med";
+	}
+	
+	if($signal >= $wifi_sig_low + 2*$difference_slots){
+		return "high";
+	}else{
+		
+		
+		//is not in any region. so just say "low";
+		return "med";
+	}
+
+}
+
 if($DEBUG) echo "I got node:" . $node. "<br />";
 
 
@@ -379,7 +467,7 @@ if($node){
 	$returnMessage = getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES);
 	//echo $returnMessage;
 	//echo "<br />";
-	$returnMessage = messageToString($returnMessage);
+	$returnMessage = messageToString($returnMessage) .",". updateMinMaxWifiSignals($wifi_sig, $conn);
 	echo $returnMessage;
 	sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn);
 	
