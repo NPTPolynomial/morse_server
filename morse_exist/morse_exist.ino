@@ -65,7 +65,8 @@ String alphabet[] = {
 
 //String SERVER_URL = "192.168.1.242";
 
-String SERVER_URL = "192.168.0.103";
+//String SERVER_URL = "192.168.0.103";
+String SERVER_URL = "192.168.0.107";
 //String SERVER_URL = "192.168.1.208";
 
 //String SERVER_URL = "192.168.1.19";
@@ -73,10 +74,8 @@ String SERVER_PAGE = "/morse_server/";
 
 //int unusedPin = 50;
 
-String NODE_NAME = "a";
+String NODE_NAME = "c";
 String NETWORK = "1";
-const int NUM_NODES = 2;
-String ALL_NODES[] = {"a", "b"};
 
 int counter;
 const int minProtectionTime = 15000; // 1500 delay * 10 seconds
@@ -158,6 +157,9 @@ void loop() {
 
         str = firstValue;
         talk(str);
+
+        delay(60000 * random(5, 25));
+//        digitalWrite(toATtiny, HIGH);
       }
     } else {
       USE_SERIAL.print("[HTTP] GET... failed, no connection or no HTTP server\n");
@@ -170,9 +172,12 @@ void loop() {
     USE_SERIAL.println("Counter reset");
     USE_SERIAL.println(counter);
     counter = 0;
-    USE_SERIAL.println(counter);
+//        digitalWrite(toATtiny, HIGH);
   }
   delay(1500);
+//  USE_SERIAL.println(random(300));
+
+  
 }
 
 void string_to_char() {
@@ -281,8 +286,6 @@ void di() {
 
 void dah() {
   //play a long pulse
-  
-
 //  digitalWrite(speakerPin, LOW);
   analogWrite(speakerPin, 255);
   delay(bpm*3);
