@@ -114,7 +114,7 @@ function insertAndUpdateTimestamp($node, $conn){
 
 ////returns the number of nodes still active. Except for the node that called this function.
 function numberOfNodesStillActiveExceptFor($node, $conn, $hour_interval){
-	echo "Starting numberOfNodesStillActiveExceptFor Node: $node, Nodegroup: $node->group<br />";
+	//echo "Starting numberOfNodesStillActiveExceptFor Node: $node, Nodegroup: $node->group<br />";
 	$group = $node->group;
 	$getTimeStampOfNodeQuery = "SELECT * FROM `central_hub` WHERE `node` != '$node' AND `group` = '$group' ";
 	$getTimeStampOfNode = mysqli_query($conn, $getTimeStampOfNodeQuery);
@@ -124,14 +124,14 @@ function numberOfNodesStillActiveExceptFor($node, $conn, $hour_interval){
 		$returnNumber = 0;
 		
 		while($row = mysqli_fetch_array($getTimeStampOfNode)){
-			echo "Checking: " . $row['node'] . " for timestamp... ";
+			//echo "Checking: " . $row['node'] . " for timestamp... ";
 			$a = new DateTime($row['node_timestamp']);
 			
 			if(isABWithInTime($a, $b, $hour_interval)){
-				echo "ACTIVE NODE! <br />";
+				//echo "ACTIVE NODE! <br />";
 				$returnNumber++;
 			}else{
-				echo "not active... <br />";
+				//echo "not active... <br />";
 			}
 		}
 		
@@ -240,21 +240,21 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 	
 	//get total number of nodes ever checked-in
 	$totalNumOfNodes = getTotalNumberOfNodes($node->group, $conn);
-		echo "totalNumOfNodes: $totalNumOfNodes <br />";
+		//echo "totalNumOfNodes: $totalNumOfNodes <br />";
 	
 	
 	
 	//check how many nodes are not expired
 	$numOfActiveNodes = numberOfNodesStillActiveExceptFor($node, $conn, $TIME_INTERVAL_FOR_NODES);
 	$numOfActiveNodes = $numOfActiveNodes + 1;
-		echo "numOfActiveNodes (counting me): $numOfActiveNodes <br />";
+		//echo "numOfActiveNodes (counting me): $numOfActiveNodes <br />";
 	
 	
 	//get current gloval variables
 	$currentLevel = getGlobalVar("level", $node->group, $conn);
 	$currentMissing = getGlobalVar("missing", $node->group, $conn);
-		echo "Global Var: level: $currentLevel<br />";
-		echo "Global Var: missing: $currentMissing<br />";
+		//echo "Global Var: level: $currentLevel<br />";
+		//echo "Global Var: missing: $currentMissing<br />";
 	
 	
 	//if you are the first, or the only node active
@@ -487,8 +487,8 @@ if($node && $node->group){
 	
 	$currentTimeNow = new DateTime('NOW');
 	
-	echo "NODE OBJ name: " . $node . "<br />";
-	echo "NODE OBJ group: " . $node->group . "<br />";
+	//echo "NODE OBJ name: " . $node . "<br />";
+	//echo "NODE OBJ group: " . $node->group . "<br />";
 	// echo "currentTimeNow: " . $currentTimeNow->format('Y-m-d H:i:s') . "<br />";
 	//
 	// echo "string to time : " . strtotime ( $TIME_INTERVAL_FOR_NODES ) . "<br />";
