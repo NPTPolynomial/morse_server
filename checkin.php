@@ -500,7 +500,12 @@ if($node && $node->group){
 	//echo "<br />";
 	$returnMessage = messageToString($returnMessage) .",". updateMinMaxWifiSignals($wifi_sig,$node->group, $conn);
 	echo $returnMessage;
-	sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn);
+	if(sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn)){
+		//echo "<br />sent";
+	}else{
+		//echo "<br />notsent";
+	}
+	
 	
 	
 }else{
