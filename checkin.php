@@ -52,6 +52,7 @@ if(isset($_GET["wifi_sig"])){
 }else{
     $wifi_sig = -30;
 }
+$WIFI_LEVEL = updateMinMaxWifiSignals($wifi_sig,$node->group, $conn);
 
 ///Returns true if A (DateTime) and B (DateTime) are within time interval (String time). (ie, A has not expired yet.
 ///Example1: $a = new DateTime('2016-05-05 03:44');
@@ -374,38 +375,49 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 
 }
 
-//Returns a concatenated english string version in front of the coded string.
-function messageToString($codeMsg){
+//Returns "code language" of morse object.
+function codeMsgToMorseLanguage($codeMsg, $node, $WIFI_LEVEL){
 	$returnString = "";
 	
 	if($codeMsg == "I,0,0"){
-		$returnString = "i exists,".$codeMsg;
+		$returnString = "cq de $node k";
 	}elseif($codeMsg == "W,0,0"){
-		$returnString = "we exists,".$codeMsg;
-	}elseif($codeMsg == "W,1,0"){
-		$returnString = "where did you go,".$codeMsg;
-	}elseif($codeMsg == "W,1,1"){
-		$returnString = "where did you go,".$codeMsg;
-	}elseif($codeMsg == "W,2,1"){
-		$returnString = "we all exist, what else is there,".$codeMsg;
+		$returnString = "cus de $node k";
 	}elseif($codeMsg == "A,0,0"){
-		$returnString = "we all exist,".$codeMsg;
+		$returnString = "cgrp de $node k";
 	}elseif($codeMsg == "A,1,0"){
-		$returnString = "we all exist,".$codeMsg;
+		$returnString = "cgrp de $node k";
 	}elseif($codeMsg == "A,2,0"){
-		$returnString = "we all exist what else is there,".$codeMsg;
+		$returnString = "cgrp de $node k";
 	}elseif($codeMsg == "A,2,1"){
-		$returnString = "we all exist what else is there,".$codeMsg;
+		$returnString = "cgrp de $node k";
 	}elseif($codeMsg == "S,1,0"){
-		$returnString = "search,".$codeMsg;
+		$returnString = "cgrp de $node prsnt? k";
 	}elseif($codeMsg == "T,2,0"){
-		$returnString = "strength,".$codeMsg;
+		
+		if($WIFI_LEVEL == 'low'){
+			$returnString = "cgrp de $node sig1sri k";
+		}else if($WIFI_LEVEL == 'med'){
+			$returnString = "cgrp de $node sig2tks k";
+		}else if($WIFI_LEVEL == 'high'){
+			$returnString = "cgrp de $node sig3tlk k";
+		}
+		
+		
 	}elseif($codeMsg == "T,2,1"){
-		$returnString = "strength,".$codeMsg;
+		
+		if($WIFI_LEVEL == 'low'){
+			$returnString = "cgrp de $node sig1sri k";
+		}else if($WIFI_LEVEL == 'med'){
+			$returnString = "cgrp de $node sig2tks k";
+		}else if($WIFI_LEVEL == 'high'){
+			$returnString = "cgrp de $node sig3tlk k";
+		}
+		
 	}elseif($codeMsg == "N,3,0"){
-		$returnString = "network,".$codeMsg;
+		$returnString = "cgrp de $node wer ntwrk k";
 	}elseif($codeMsg == "N,3,1"){
-		$returnString = "network,".$codeMsg;
+		$returnString = "cgrp de $node wer ntwrk k";
 	}else{
 		$returnString = "????,".$codeMsg;
 	}
@@ -414,6 +426,55 @@ function messageToString($codeMsg){
 	//N,3,1
 	return $returnString;
 }
+
+
+//Returns a concatenated english string version in front of the coded string.
+function messageToString($codeMsg, $node ,$WIFI_LEVEL){
+	$returnString = "";
+	
+	if($codeMsg == "I,0,0"){
+		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."i exists,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."i exists,";
+	}elseif($codeMsg == "W,0,0"){
+		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we exists,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we exists,";
+	}elseif($codeMsg == "A,0,0"){
+		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,";
+	}elseif($codeMsg == "A,1,0"){
+		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,";
+	}elseif($codeMsg == "A,2,0"){
+		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,";
+	}elseif($codeMsg == "A,2,1"){
+		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,";
+	}elseif($codeMsg == "S,1,0"){
+		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."search,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."search,";
+	}elseif($codeMsg == "T,2,0"){
+		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,";
+	}elseif($codeMsg == "T,2,1"){
+		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,";
+	}elseif($codeMsg == "N,3,0"){
+		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,";
+	}elseif($codeMsg == "N,3,1"){
+		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,".$codeMsg;
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,";
+	}else{
+		// $returnString = "????,".$codeMsg;
+		$returnString = "????,";
+	}
+	//S,1,0
+	//T,2,1
+	//N,3,1
+	return $returnString;
+}
+
 
 
 //SENDS returnmessage to the autoupdating board
@@ -498,7 +559,7 @@ if($node && $node->group){
 	$returnMessage = getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES);
 	//echo $returnMessage;
 	//echo "<br />";
-	$returnMessage = messageToString($returnMessage) .",". updateMinMaxWifiSignals($wifi_sig,$node->group, $conn);
+	$returnMessage = messageToString($returnMessage, $node, $WIFI_LEVEL) .",". $WIFI_LEVEL;
 	echo $returnMessage;
 	if(sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn)){
 		//echo "<br />sent";
