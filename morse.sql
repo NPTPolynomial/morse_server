@@ -368,7 +368,7 @@ CREATE TABLE `central_global_vars` (
   `global_var` varchar(15) NOT NULL,
   `value` varchar(10) NOT NULL,
   `group` int(9) NOT NULL,
-  PRIMARY KEY (`global_var`)
+  PRIMARY KEY (`global_var`,`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -392,8 +392,7 @@ CREATE TABLE `central_hub` (
   `node` varchar(8) NOT NULL,
   `group` int(9) NOT NULL,
   `node_timestamp` varchar(50) NOT NULL,
-  PRIMARY KEY (`node`,`group`),
-  UNIQUE KEY `node` (`node`)
+  PRIMARY KEY (`node`,`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
