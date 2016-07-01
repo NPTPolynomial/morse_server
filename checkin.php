@@ -1,29 +1,50 @@
 <?php
-
+date_default_timezone_set("America/Vancouver");
 require 'config.php';
+
+class Node {
+
+	public $name;
+	public $group;
+	
+	public function __construct($nameGiven){
+		$this->name = $nameGiven;
+	}
+
+	public function __toString(){
+		return $this->name;
+	}
+
+
+}
 
 ///////////////////
 // Local Variables
 
-$node_color = "R";
+$node_color = "r";
 
 
 
 // Gather the variables
 
 if(isset($_GET["node"])){
-    $node = $_GET["node"];
-	if($node == "a"){
-		$node_color = "R";
-	}else if($node == "b"){
-		$node_color = "B";
-	}else if($node == "c"){
-		$node_color = "Y";
+    $node = new Node($_GET["node"]);
+	
+	
+	if(isset($_GET["group"])){
+	    $node->group = $_GET["group"];
+	}else{
+	    $node->group = 0;
+		if($DEBUG) echo "No group set..";
 	}
-		
+	
+	
 }else{
-    $node = 0;
+	$node = new Node(0);
+	if($DEBUG) echo "No node set..";
 }
+
+
 
 //wifi 20max, 40min
 if(isset($_GET["wifi_sig"])){
@@ -46,21 +67,24 @@ if(isset($_GET["wifi_sig"])){
 // }
 function isABWithInTime($a, $b, $hour_interval){
 	
-	$aStr = $a->format('Y-m-d H:i');
-	$bStr = $b->format('Y-m-d H:i');
+	$aStr = $a->format('Y-m-d H:i:s');
+	$bStr = $b->format('Y-m-d H:i:s');
 	
 	//echo "isABWithInTime: $aStr, $bStr, $hour_interval <br />";
 	
 	
 	$timeInterval = $hour_interval;
-	$newdate = strtotime ( $timeInterval , strtotime ( $a->format('Y-m-d H:i') ) ) ;
-	$newdate = date ( 'Y-m-d H:i' , $newdate );
 	
-	//echo "Given time from fetch: " . $a->format('Y-m-d H:i')."<br />";
-	//echo "NOW time from fetch: " . $b->format('Y-m-d H:i')."<br />";
-	//echo "Given time from fetch (+2 Hrs): " . $newdate . "<br />";
+	$newdate = strtotime ( $timeInterval , strtotime ( $a->format('Y-m-d H:i:s') ) ) ;
+	$newdate = date ( 'Y-m-d H:i:s' , $newdate );
+	
+	//echo "Time + Interval = $newdate <br />";
+	
+	// echo "Given time from fetch: " . $a->format('Y-m-d H:i:s')."<br />";
+// 	echo "NOW time from fetch: " . $b->format('Y-m-d H:i:s')."<br />";
+// 	echo "Given time from fetch (+2 Hrs): " . $newdate . "<br />";
 
-	if( strtotime ($newdate) > strtotime($b->format('Y-m-d H:i'))){
+	if( strtotime ($newdate) > strtotime($b->format('Y-m-d H:i:s'))){
 		//echo "still within time<br />";
 		return true;
 	}else{
@@ -76,9 +100,9 @@ function insertAndUpdateTimestamp($node, $conn){
 	//echo "Doing time stamping for $node<br />";
 	
 	$b = new DateTime('NOW');
-	$node_timestamp = $b->format('Y-m-d H:i');
+	$node_timestamp = $b->format('Y-m-d H:i:s');
 	
-	$updateTimeStampQuery = "INSERT INTO `central_hub`(`node`, `node_timestamp`) VALUES ('$node','$node_timestamp') ON DUPLICATE KEY UPDATE `node_timestamp` = '$node_timestamp' ";
+	$updateTimeStampQuery = "INSERT INTO `central_hub`(`node`, `group`, `node_timestamp`) VALUES ('$node','$node->group','$node_timestamp') ON DUPLICATE KEY UPDATE `node_timestamp` = '$node_timestamp' ";
 	$updateTimeStamp = mysqli_query($conn, $updateTimeStampQuery);
 	
 	if($updateTimeStamp){
@@ -89,9 +113,10 @@ function insertAndUpdateTimestamp($node, $conn){
 
 
 ////returns the number of nodes still active. Except for the node that called this function.
-function numberOfNodesStillActiveExceptFor($node, $conn){
-	//echo "Starting numberOfNodesStillActiveExceptFor<br />";
-	$getTimeStampOfNodeQuery = "SELECT * FROM central_hub WHERE node != '$node' ";
+function numberOfNodesStillActiveExceptFor($node, $conn, $hour_interval){
+	echo "Starting numberOfNodesStillActiveExceptFor Node: $node, Nodegroup: $node->group<br />";
+	$group = $node->group;
+	$getTimeStampOfNodeQuery = "SELECT * FROM `central_hub` WHERE `node` != '$node' AND `group` = '$group' ";
 	$getTimeStampOfNode = mysqli_query($conn, $getTimeStampOfNodeQuery);
 	if($getTimeStampOfNode && mysqli_num_rows($getTimeStampOfNode) > 0){
 		
@@ -99,14 +124,14 @@ function numberOfNodesStillActiveExceptFor($node, $conn){
 		$returnNumber = 0;
 		
 		while($row = mysqli_fetch_array($getTimeStampOfNode)){
-			//echo "Checking: " . $row['node'] . " for timestamp... ";
+			echo "Checking: " . $row['node'] . " for timestamp... ";
 			$a = new DateTime($row['node_timestamp']);
 			
-			if(isABWithInTime($a, $b, '2')){
-				//echo "ACTIVE NODE! <br />";
+			if(isABWithInTime($a, $b, $hour_interval)){
+				echo "ACTIVE NODE! <br />";
 				$returnNumber++;
 			}else{
-				//echo "not active... <br />";
+				echo "not active... <br />";
 			}
 		}
 		
@@ -122,9 +147,9 @@ function numberOfNodesStillActiveExceptFor($node, $conn){
 
 ///inserts the new global variable into database, or updates if already exists
 ///RETURN: True if successful, and FALSE if failed. 
-function setGlobalVar($var, $value, $conn){
+function setGlobalVar($var, $group, $value, $conn){
 	//echo "setGlobalVar($var, $value).... <br />";
-	$setGlobalVarQuery = "INSERT INTO `central_global_vars` (`global_var`, `value`) VALUES ('$var','$value') ON DUPLICATE KEY UPDATE `value` = '$value' ";
+	$setGlobalVarQuery = "INSERT INTO `central_global_vars` (`global_var`, `value`, `group`) VALUES ('$var','$value', '$group') ON DUPLICATE KEY UPDATE `value` = '$value' ";
 	$setGlobalVar = mysqli_query($conn, $setGlobalVarQuery);
 	if($setGlobalVar){
 		return true;
@@ -135,8 +160,8 @@ function setGlobalVar($var, $value, $conn){
 
 
 ///RETURN: value of global variable, (-1) if could not be found.
-function getGlobalVar($var, $conn){
-	$getGlobalVarQuery = "SELECT * FROM `central_global_vars` WHERE `global_var` = '$var' ";
+function getGlobalVar($var, $group, $conn){
+	$getGlobalVarQuery = "SELECT * FROM `central_global_vars` WHERE `global_var` = '$var' AND `group` = '$group'";
 	$getGlobalVar = mysqli_query($conn, $getGlobalVarQuery);
 	if($getGlobalVar){
 		
@@ -155,7 +180,7 @@ function getGlobalVar($var, $conn){
 function getCurrentTimestampForNode($node, $conn){
 	//echo "getCurrentTimestampForNode($node).... <br />";
 	
-	$getTimeStampOfNodeQuery = "SELECT * FROM central_hub WHERE node = '$node' ";
+	$getTimeStampOfNodeQuery = "SELECT * FROM `central_hub` WHERE `node` = '$node' AND `group` = '$node->group'";
 	$getTimeStampOfNode = mysqli_query($conn, $getTimeStampOfNodeQuery);
 	if($getTimeStampOfNode && mysqli_num_rows($getTimeStampOfNode) > 0){
 		//echo "getting time stamp... <br />";
@@ -172,9 +197,9 @@ function getCurrentTimestampForNode($node, $conn){
 
 
 //RETURN: total number of nodes in the global hub. (-1) if the command fails.
-function getTotalNumberOfNodes($conn){
+function getTotalNumberOfNodes($group, $conn){
 	//echo "getTotalNumberOfNodes.... <br />";
-	$getTotalNumberOfNodesQuery = "SELECT COUNT(*) AS `count` FROM `central_hub`";
+	$getTotalNumberOfNodesQuery = "SELECT COUNT(*) AS `count` FROM `central_hub` WHERE `group` = '$group'";
 	$getTotalNumberOfNodes = mysqli_query($conn, $getTotalNumberOfNodesQuery);
 	if($getTotalNumberOfNodes){
 		
@@ -214,30 +239,30 @@ function getAmIMissingNode($node, $conn, $hour_interval){
 function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 	
 	//get total number of nodes ever checked-in
-	$totalNumOfNodes = getTotalNumberOfNodes($conn);
-		//echo "totalNumOfNodes: $totalNumOfNodes <br />";
+	$totalNumOfNodes = getTotalNumberOfNodes($node->group, $conn);
+		echo "totalNumOfNodes: $totalNumOfNodes <br />";
 	
 	
 	
 	//check how many nodes are not expired
-	$numOfActiveNodes = numberOfNodesStillActiveExceptFor($node, $conn);
+	$numOfActiveNodes = numberOfNodesStillActiveExceptFor($node, $conn, $TIME_INTERVAL_FOR_NODES);
 	$numOfActiveNodes = $numOfActiveNodes + 1;
-		//echo "numOfActiveNodes (counting me): $numOfActiveNodes <br />";
+		echo "numOfActiveNodes (counting me): $numOfActiveNodes <br />";
 	
 	
 	//get current gloval variables
-	$currentLevel = getGlobalVar("level", $conn);
-	$currentMissing = getGlobalVar("missing", $conn);
-		//echo "Global Var: level: $currentLevel<br />";
-		//echo "Global Var: missing: $currentMissing<br />";
+	$currentLevel = getGlobalVar("level", $node->group, $conn);
+	$currentMissing = getGlobalVar("missing", $node->group, $conn);
+		echo "Global Var: level: $currentLevel<br />";
+		echo "Global Var: missing: $currentMissing<br />";
 	
 	
 	//if you are the first, or the only node active
 	if(!(isset($numOfActiveNodes)) || $numOfActiveNodes == -1 || $numOfActiveNodes <= 1 || $numOfActiveNodes == null){
-		setGlobalVar("level", "0", $conn);
-		setGlobalVar("missing", "0", $conn);
-		setGlobalVar("wifi_sig_low", -55, $conn);
-		setGlobalVar("wifi_sig_high", -40, $conn);
+		setGlobalVar("level", $node->group, "0", $conn);
+		setGlobalVar("missing", $node->group, "0", $conn);
+		setGlobalVar("wifi_sig_low", $node->group, -55, $conn);
+		setGlobalVar("wifi_sig_high", $node->group, -40, $conn);
 		insertAndUpdateTimestamp($node, $conn);
 		return "I,0,0";
 	}
@@ -248,7 +273,7 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 			
 		//if all present, level up
 		if($currentLevel == 0){
-			setGlobalVar("level", "1", $conn);
+			setGlobalVar("level", $node->group, "1", $conn);
 			insertAndUpdateTimestamp($node, $conn);
 			return "A,1,$currentMissing";
 		}
@@ -314,8 +339,8 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 
 		//NEW STUFF
 		//A node has gone missing, set global missing variable to 1
-		setGlobalVar("missing", "1", $conn);
-		setGlobalVar("level", "2", $conn);
+		setGlobalVar("missing", $node->group,  "1", $conn);
+		setGlobalVar("level", $node->group,  "2", $conn);
 		insertAndUpdateTimestamp($node, $conn);
 		
 		return "S,$currentLevel,$currentMissing";
@@ -333,7 +358,7 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 	
 	//if more than 1 node is active, and level is 2, that means ... Report strength and go to level 3.
 	if($currentLevel == 2 && $numOfActiveNodes > 1){
-		setGlobalVar("level", "3", $conn);//strength level.
+		setGlobalVar("level", $node->group, "3", $conn);//strength level.
 		insertAndUpdateTimestamp($node, $conn);
 		return "T,$currentLevel,$currentMissing";
 	}
@@ -395,9 +420,9 @@ function messageToString($codeMsg){
 function sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn){
 	
 	//echo "setGlobalVar($var, $value).... <br />";
-	$currentT = $currentTimeNow->format('Y-m-d H:i');
+	$currentT = $currentTimeNow->format('Y-m-d H:i:s');
 	
-	$sendMessageToBoardQuery = "INSERT INTO `board` (`datetime`, `from`, `to`, `type`, `network`) VALUES ('$currentT','$node', 'ALL', '$returnMessage', 3)";
+	$sendMessageToBoardQuery = "INSERT INTO `board` (`datetime`, `from`, `to`, `type`, `network`) VALUES ('$currentT','$node', 'ALL', '$returnMessage', '$node->group')";
 	$sendMessageToBoard = mysqli_query($conn, $sendMessageToBoardQuery);
 	if($sendMessageToBoard){
 		return true;
@@ -409,15 +434,15 @@ function sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn){
 
 
 //Update min and max for the wifi signals record
-function updateMinMaxWifiSignals($signal, $conn){
+function updateMinMaxWifiSignals($signal, $group, $conn){
 	
-	$wifi_sig_low = getGlobalVar("wifi_sig_low", $conn);
-	$wifi_sig_high = getGlobalVar("wifi_sig_high", $conn);
+	$wifi_sig_low = getGlobalVar("wifi_sig_low", $group, $conn);
+	$wifi_sig_high = getGlobalVar("wifi_sig_high", $group, $conn);
 
 	//if it is less than min, update the min
 	if($signal < $wifi_sig_low){
 		//update the min
-		setGlobalVar("wifi_sig_low", $signal, $conn);
+		setGlobalVar("wifi_sig_low", $group, $signal, $conn);
 		return "low";
 	}
 	
@@ -426,7 +451,7 @@ function updateMinMaxWifiSignals($signal, $conn){
 	//elseif it is more than the max
 	if($signal > $wifi_sig_high){
 		//update the max
-		setGlobalVar("wifi_sig_high", $signal, $conn);
+		setGlobalVar("wifi_sig_high", $group, $signal, $conn);
 		return "high";
 	}
 	
@@ -454,21 +479,32 @@ function updateMinMaxWifiSignals($signal, $conn){
 }
 
 if($DEBUG) echo "I got node:" . $node. "<br />";
+if($DEBUG) echo "I got group:" . $node_group. "<br />";
 
 
-if($node){
+
+if($node && $node->group){
 	
 	$currentTimeNow = new DateTime('NOW');
-	//echo "currentTimeNow: " . $currentTimeNow->format('Y-m-d H:i') . "<br />";
+	
+	echo "NODE OBJ name: " . $node . "<br />";
+	echo "NODE OBJ group: " . $node->group . "<br />";
+	// echo "currentTimeNow: " . $currentTimeNow->format('Y-m-d H:i:s') . "<br />";
+	//
+	// echo "string to time : " . strtotime ( $TIME_INTERVAL_FOR_NODES ) . "<br />";
+	// echo "converted to date: " . date('Y-m-d H:i:s' , strtotime ( $TIME_INTERVAL_FOR_NODES ) ) . "<br />";
+	
 	$returnMessage = "";
 	$returnMessage = getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES);
 	//echo $returnMessage;
 	//echo "<br />";
-	$returnMessage = messageToString($returnMessage) .",". updateMinMaxWifiSignals($wifi_sig, $conn);
+	$returnMessage = messageToString($returnMessage) .",". updateMinMaxWifiSignals($wifi_sig,$node->group, $conn);
 	echo $returnMessage;
 	sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn);
 	
 	
+}else{
+	if($DEBUG) echo "no node, or no group...";
 }
 
 $conn->close();
