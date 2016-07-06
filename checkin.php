@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set("America/Vancouver");
 require 'config.php';
+use Abraham\TwitterOAuth\TwitterOAuth;
 
 class Node {
 
@@ -459,37 +460,37 @@ function messageToString($codeMsg, $node ,$WIFI_LEVEL){
 	
 	if($codeMsg == "I,0,0"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."i exists,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."i exists,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."i exists";
 	}elseif($codeMsg == "W,0,0"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we exists,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we exists,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we exists";
 	}elseif($codeMsg == "A,0,0"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group";
 	}elseif($codeMsg == "A,1,0"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group";
 	}elseif($codeMsg == "A,2,0"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there";
 	}elseif($codeMsg == "A,2,1"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there";
 	}elseif($codeMsg == "S,1,0"){
 		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."search,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."search,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."search";
 	}elseif($codeMsg == "T,2,0"){
 		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength";
 	}elseif($codeMsg == "T,2,1"){
 		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength";
 	}elseif($codeMsg == "N,3,0"){
 		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network";
 	}elseif($codeMsg == "N,3,1"){
 		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network";
 	}else{
 		// $returnString = "????,".$codeMsg;
 		$returnString = "????,";
@@ -593,7 +594,7 @@ if($node && $node->group){
 	/////////////////
 	//Post to twitter:
 	//
-	//$twitter->post('statuses/update', array('status' => $returnMessage));
+	//$twitter->post('statuses/update', array('status' => $twitterSuitableMsg));
 	
 	
 	echo $returnMessage;
