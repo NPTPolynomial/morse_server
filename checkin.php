@@ -33,6 +33,31 @@ if(isset($_GET["node"])){
 	
 	if(isset($_GET["group"])){
 	    $node->group = $_GET["group"];
+		
+		
+		//setup twitter variables and keys
+		
+		$twitterValues = getTwitterValues($conn, $node->group);
+		
+		
+		// # Define constants
+		if($twitterValues['TWITTER_USERNAME'] != ''){
+		define('TWITTER_USERNAME', $twitterValues['TWITTER_USERNAME']);
+		define('CONSUMER_KEY', $twitterValues['CONSUMER_KEY']);
+		define('CONSUMER_SECRET', $twitterValues['CONSUMER_SECRET']);
+		define('ACCESS_TOKEN', $twitterValues['ACCESS_TOKEN']);
+		define('ACCESS_TOKEN_SECRET', $twitterValues['ACCESS_TOKEN_SECRET']);
+
+
+		# Create the connection
+		$twitter = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+		# Migrate over to SSL/TLS
+		$twitter->ssl_verifypeer = true;
+		}else{
+			die("Error setting up Twitter");
+		}
+		
+		
 	}else{
 	    $node->group = 0;
 		if($DEBUG) echo "No group set..";
@@ -557,9 +582,20 @@ if($node && $node->group){
 	
 	$returnMessage = "";
 	$returnMessage = getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES);
+	
+	$twitterSuitableMsg = $node .": " . codeMsgToMorseLanguage($returnMessage, $node, $WIFI_LEVEL);
+	
 	//echo $returnMessage;
 	//echo "<br />";
 	$returnMessage = messageToString($returnMessage, $node, $WIFI_LEVEL) .",". $WIFI_LEVEL;
+	
+	
+	/////////////////
+	//Post to twitter:
+	//
+	//$twitter->post('statuses/update', array('status' => $returnMessage));
+	
+	
 	echo $returnMessage;
 	if(sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn)){
 		//echo "<br />sent";
