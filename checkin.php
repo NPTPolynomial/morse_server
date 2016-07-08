@@ -599,9 +599,9 @@ if($node && $node->group){
 	
 	echo $returnMessage;
 	if(sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn)){
-		echo "<br />sent";
+		//echo "<br />sent";
 	}else{
-		echo "<br />notsent";
+		//echo "<br />notsent";
 	}
 	
 	
