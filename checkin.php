@@ -509,7 +509,9 @@ function sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn){
 	//echo "setGlobalVar($var, $value).... <br />";
 	$currentT = $currentTimeNow->format('Y-m-d H:i:s');
 	
-	$sendMessageToBoardQuery = "INSERT INTO `board` (`datetime`, `from`, `to`, `type`, `network`) VALUES ('$currentT','$node', 'ALL', '$returnMessage', '$node->group')";
+	$sendMessageToBoardQuery = "INSERT INTO `morse`.`board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`, `network`) VALUES ('$currentT', NULL, '$node', 'ALL', '$returnMessage', '0', '0', '0', '$node->group');";
+								
+	
 	$sendMessageToBoard = mysqli_query($conn, $sendMessageToBoardQuery);
 	if($sendMessageToBoard){
 		return true;
