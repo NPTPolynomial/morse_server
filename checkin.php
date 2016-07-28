@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set("America/Vancouver");
 require 'config.php';
+use Abraham\TwitterOAuth\TwitterOAuth;
 
 class Node {
 
@@ -33,6 +34,31 @@ if(isset($_GET["node"])){
 	
 	if(isset($_GET["group"])){
 	    $node->group = $_GET["group"];
+		
+		
+		//setup twitter variables and keys
+		
+		$twitterValues = getTwitterValues($conn, $node->group);
+		
+		
+		// # Define constants
+		if($twitterValues['TWITTER_USERNAME'] != ''){
+		define('TWITTER_USERNAME', $twitterValues['TWITTER_USERNAME']);
+		define('CONSUMER_KEY', $twitterValues['CONSUMER_KEY']);
+		define('CONSUMER_SECRET', $twitterValues['CONSUMER_SECRET']);
+		define('ACCESS_TOKEN', $twitterValues['ACCESS_TOKEN']);
+		define('ACCESS_TOKEN_SECRET', $twitterValues['ACCESS_TOKEN_SECRET']);
+
+
+		# Create the connection
+		$twitter = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+		# Migrate over to SSL/TLS
+		$twitter->ssl_verifypeer = true;
+		}else{
+			die("Error setting up Twitter");
+		}
+		
+		
 	}else{
 	    $node->group = 0;
 		if($DEBUG) echo "No group set..";
@@ -282,31 +308,6 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 	
 	//Level 1, and if all nodes are active
 	if($currentLevel == 1 && $numOfActiveNodes >= $totalNumOfNodes){
-	
-		// //if at level 1, all present, but no one went missing yet
-// 		if($currentMissing == 0){
-//
-// 			//if that node comes back, then send them a M, else send a W for every else.
-// 			if(getAmIMissingNode($node, $conn, $TIME_INTERVAL_FOR_NODES)){
-// 				setGlobalVar("missing", "1", $conn);
-// 				insertAndUpdateTimestamp($node, $conn);
-// 				return "M,$currentLevel,1";
-// 			}else{
-// 				//echo "failed missing node test <br />";
-//
-// 				insertAndUpdateTimestamp($node, $conn);
-// 				return "A,$currentLevel,$currentMissing";
-// 			}
-//
-// 		}
-//
-// 		//if at level 1, all present, someone went missing already
-// 		elseif($currentMissing == 1){
-// 			setGlobalVar("level", "2", $conn);
-// 			insertAndUpdateTimestamp($node, $conn);
-// 			return "A,2,$currentMissing";
-// 		}
-
 
 		insertAndUpdateTimestamp($node, $conn);
 		return "A,$currentLevel,$currentMissing";
@@ -323,19 +324,6 @@ function getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES){
 	
 	//if more than 1 node is active, and level is 1, that means someone is missing.
 	if($numOfActiveNodes > 1 && $currentLevel == 1){
-		
-		
-		// //if that node comes back, then send them a M, else send a W for every else.
-// 		if(getAmIMissingNode($node, $conn, $TIME_INTERVAL_FOR_NODES)){
-// 			setGlobalVar("missing", "1", $conn);
-// 			insertAndUpdateTimestamp($node, $conn);
-// 			return "M,$currentLevel,1";
-// 		}else{
-// 			//echo "failed missing node test2 <br />";
-//
-// 			insertAndUpdateTimestamp($node, $conn);
-// 			return "W,$currentLevel,$currentMissing";
-// 		}
 
 
 		//NEW STUFF
@@ -434,37 +422,37 @@ function messageToString($codeMsg, $node ,$WIFI_LEVEL){
 	
 	if($codeMsg == "I,0,0"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."i exists,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."i exists,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."i exists";
 	}elseif($codeMsg == "W,0,0"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we exists,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we exists,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we exists";
 	}elseif($codeMsg == "A,0,0"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group";
 	}elseif($codeMsg == "A,1,0"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."group";
 	}elseif($codeMsg == "A,2,0"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there";
 	}elseif($codeMsg == "A,2,1"){
 		//$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."we all exist what else is there";
 	}elseif($codeMsg == "S,1,0"){
 		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."search,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."search,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."search";
 	}elseif($codeMsg == "T,2,0"){
 		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength";
 	}elseif($codeMsg == "T,2,1"){
 		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."strength";
 	}elseif($codeMsg == "N,3,0"){
 		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network";
 	}elseif($codeMsg == "N,3,1"){
 		// $returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,".$codeMsg;
-		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network,";
+		$returnString = codeMsgToMorseLanguage($codeMsg, $node ,$WIFI_LEVEL).", "."network";
 	}else{
 		// $returnString = "????,".$codeMsg;
 		$returnString = "????,";
@@ -483,7 +471,9 @@ function sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn){
 	//echo "setGlobalVar($var, $value).... <br />";
 	$currentT = $currentTimeNow->format('Y-m-d H:i:s');
 	
-	$sendMessageToBoardQuery = "INSERT INTO `board` (`datetime`, `from`, `to`, `type`, `network`) VALUES ('$currentT','$node', 'ALL', '$returnMessage', '$node->group')";
+	$sendMessageToBoardQuery = "INSERT INTO `morse`.`board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`, `network`) VALUES ('$currentT', NULL, '$node', 'ALL', '$returnMessage', '0', '0', '0', '$node->group');";
+								
+	
 	$sendMessageToBoard = mysqli_query($conn, $sendMessageToBoardQuery);
 	if($sendMessageToBoard){
 		return true;
@@ -557,9 +547,20 @@ if($node && $node->group){
 	
 	$returnMessage = "";
 	$returnMessage = getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES);
+	
+	$twitterSuitableMsg = $node .": " . codeMsgToMorseLanguage($returnMessage, $node, $WIFI_LEVEL);
+	
 	//echo $returnMessage;
 	//echo "<br />";
 	$returnMessage = messageToString($returnMessage, $node, $WIFI_LEVEL) .",". $WIFI_LEVEL;
+	
+	
+	/////////////////
+	//Post to twitter:
+	//
+	//$twitter->post('statuses/update', array('status' => $twitterSuitableMsg));
+	
+	
 	echo $returnMessage;
 	if(sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn)){
 		//echo "<br />sent";
