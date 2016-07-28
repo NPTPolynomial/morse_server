@@ -597,8 +597,8 @@ if($node && $node->group){
 	$returnMessage = "";
 	$returnMessage = getReturnMessageForNode($node, $conn, $TIME_INTERVAL_FOR_NODES);
 	
-	$twitterSuitableMsg = $node .": " . codeMsgToMorseLanguageTwitterSuitable($returnMessage, $node, $WIFI_LEVEL);
-	echo "twitterSuitableMsg: $twitterSuitableMsg <br />";
+	$twitterSuitableMsg = codeMsgToMorseLanguageTwitterSuitable($returnMessage, $node, $WIFI_LEVEL);
+	//echo "twitterSuitableMsg: $twitterSuitableMsg <br />";
 	//echo $returnMessage;
 	//echo "<br />";
 	$returnMessage = messageToString($returnMessage, $node, $WIFI_LEVEL) .",". $WIFI_LEVEL;
