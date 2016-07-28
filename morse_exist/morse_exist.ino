@@ -13,6 +13,8 @@ int toATtiny = 12;
 #include <string.h>
 #define MAX_STRING_LEN 20
 
+boolean didITalked = false;
+
 String str = "hello";
 #define buffer_length 13
 char charBuf[buffer_length];
@@ -56,26 +58,27 @@ String alphabet[] = {
   "211233",   //x
   "212233",   //y
   "221133",   //z
+  "112211",   //?
 };
 
 //char to int ASCII conversion (to make sure it matches up with alphabet[])
 #define ASCIIconv 96
 //skip if it is this number for it is a space bar
 #define space_char 32
+#define question_char 63
 
 //String SERVER_URL = "192.168.1.242";
 
 //String SERVER_URL = "192.168.0.103";
-String SERVER_URL = "192.168.0.107";
+//String SERVER_URL = "192.168.0.107";
 //String SERVER_URL = "192.168.1.208";
-
+String SERVER_URL = "morsethings.siat.sfu.ca";
 //String SERVER_URL = "192.168.1.19";
-String SERVER_PAGE = "/morse_server/";
 
 //int unusedPin = 50;
 
-String NODE_NAME = "c";
-String NETWORK = "1";
+String NODE_NAME = "b";
+int GROUP = 1;
 
 int counter;
 const int minProtectionTime = 15000; // 1500 delay * 10 seconds
@@ -89,7 +92,7 @@ const int sleepTimeS = 10;
 
 void setup() {
 
-
+  didITalked = false;
   counter = 0;
   pinMode(toATtiny, OUTPUT);
 
@@ -102,6 +105,8 @@ void setup() {
 
   pinMode(BUILTIN_LED, OUTPUT);
   pinMode(speakerPin, OUTPUT);
+  digitalWrite(speakerPin, LOW);  // CUP
+//  digitalWrite(speakerPin, HIGH); // BOWL
 
   delay(1000);
   WiFiMulti.addAP("eds2g", "DesignStudio2016");
@@ -114,7 +119,7 @@ void loop() {
 
 
   if ((WiFiMulti.run() == WL_CONNECTED)
-      && counter < minProtectionTime)
+      && counter < minProtectionTime && !didITalked)
   {
 
     prevMillis = millis();
@@ -122,7 +127,7 @@ void loop() {
 
     USE_SERIAL.print("[HTTP] begin...\n");
 
-    http.begin(SERVER_URL, 80, "/morse_server/checkin.php?node=" + NODE_NAME); //HTTP
+    http.begin(SERVER_URL, 80, "/morse_server/checkin.php?node=" + NODE_NAME + "&group=" + GROUP + "&wifi_sig=" + String(test.RSSI())); //HTTP
 
     USE_SERIAL.print("[HTTP] GET...\n");
     // start connection and send HTTP header
@@ -150,29 +155,33 @@ void loop() {
         USE_SERIAL.println("secondValue: " + secondValue);
         USE_SERIAL.println("thirdValue: " + thirdValue);
         USE_SERIAL.println("forthValue: " + forthValue);
-        USE_SERIAL.println("fifthValue: " + fifthValue);
-        USE_SERIAL.println("RSSI" + test.RSSI());
+//        USE_SERIAL.println("fifthValue: " + fifthValue);
+        String signal_val = String(test.RSSI());
+        USE_SERIAL.println("SIGNAL " + signal_val);
+        
 
         USE_SERIAL.println(payload);
 
         str = firstValue;
         talk(str);
-
-        delay(60000 * random(5, 25));
-//        digitalWrite(toATtiny, HIGH);
+        didITalked = true;
+//        delay(60000 * random(5, 25));
+        digitalWrite(toATtiny, HIGH);
       }
     } else {
       USE_SERIAL.print("[HTTP] GET... failed, no connection or no HTTP server\n");
     }
+    
   }
 
+  // This give 17-18 seconds
   counter += 1500;
 
   if (counter > minProtectionTime) {
     USE_SERIAL.println("Counter reset");
     USE_SERIAL.println(counter);
     counter = 0;
-//        digitalWrite(toATtiny, HIGH);
+    digitalWrite(toATtiny, HIGH);
   }
   delay(1500);
 //  USE_SERIAL.println(random(300));
@@ -222,6 +231,10 @@ void int_to_morse() {
     if (intBuf[i] == space_char) {
       Serial.print(" / ");
       silence(4);
+    }
+    else if (intBuf[i] == question_char) {
+      Serial.print(" ? ");
+      morse_to_sound(26);
     }
     else {
       Serial.print(".");
@@ -279,15 +292,15 @@ void talk(String q) {
 void di() {
   //play a short pulse
   
-//  digitalWrite(speakerPin, LOW);
-  analogWrite(speakerPin, 255);
+  digitalWrite(speakerPin, HIGH);  // CUP
+//  digitalWrite(speakerPin, LOW);  // BOWL
   delay(bpm);
 }
 
 void dah() {
   //play a long pulse
-//  digitalWrite(speakerPin, LOW);
-  analogWrite(speakerPin, 255);
+  digitalWrite(speakerPin, HIGH);  // CUP
+//  digitalWrite(speakerPin, LOW);  // BOWL
   delay(bpm*3);
 }
 
@@ -296,8 +309,8 @@ void silence(int i) {
   //play a short pulse
  
 
-//  digitalWrite(speakerPin, HIGH);
-  analogWrite(speakerPin, 0);
+  digitalWrite(speakerPin, LOW);  //CUP
+//  digitalWrite(speakerPin, HIGH);  // BOWL
   delay(bpm*i);
 }
 
