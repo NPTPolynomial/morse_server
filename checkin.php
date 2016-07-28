@@ -607,7 +607,7 @@ if($node && $node->group){
 	/////////////////
 	//Post to twitter:
 	//
-	//$twitter->post('statuses/update', array('status' => $twitterSuitableMsg));
+	$twitter->post('statuses/update', array('status' => $twitterSuitableMsg));
 	
 	
 	echo $returnMessage;
