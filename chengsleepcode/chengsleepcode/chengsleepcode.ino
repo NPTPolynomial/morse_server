@@ -15,10 +15,7 @@ void setup() {
   watchdog_counter = 0;
   pinMode(vccPin, OUTPUT); // initialize vcc pin for mosfet
   pinMode(signalPin, INPUT);// initialize singalPin for taking in signal from a source
-  
-  pinMode(A0, INPUT);
-  randomSeed(analogRead(A0));
-  
+
   //Power down various bits of hardware to lower power usage  
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); //Power down everything, wake up from WDT
   sleep_enable();
@@ -50,15 +47,22 @@ void loop() {
   
   if(digitalRead(signalPin) == HIGH)
   {
-    int r = 1;
-    while(r > 0){
-      ADCSRA &= ~(1<<ADEN); //Disable ADC, saves ~230uA
-      for(int i =0; i < 60; i++){
-        setup_watchdog(6); //Setup watchdog to go off after 1sec
-        sleep_mode(); //Go to sleep! Wake up 1sec later and check water
-        digitalWrite(vccPin, LOW);
-      }
-      r = random(2);
+    // 1 to 1.12423
+    // 562.85/500  = 1.1257
+    // 4176.57 / 3600  = 1.160158
+    // 4057    / 3600  = 1.12694  mistake?
+    // 4075    / 3600  = 1.131944444    (database)
+    // 7182.45 / 6372  = 1.127189266    
+    // 1.127963863   (Server based BEST number) 
+//    unsigned int ran = random(3, 19+1);  // 3 - 22 seconds in real world 
+
+    unsigned int ran = random(4771.429454917, 26580.638780624);  // 3 - 22 seconds in real world 
+    
+    for(unsigned int i =0; i < ran; i++){ 
+    ADCSRA &= ~(1<<ADEN); //Disable ADC, saves ~230uA
+    setup_watchdog(6); //Setup watchdog to go off after 1sec
+    sleep_mode(); //Go to sleep! Wake up 1sec   later and check water
+    digitalWrite(vccPin, LOW);
     }
   }
 
