@@ -607,10 +607,22 @@ if($node && $node->group){
 	/////////////////
 	//Post to twitter:
 	//
-	$twitter->post('statuses/update', array('status' => $twitterSuitableMsg));
+	$twitterResponse = $twitter->post('statuses/update', array('status' => $twitterSuitableMsg));
+	
+//	var_dump($twitterResponse);
+
+//	print_r($twitterResponse);
 	
 	
 	echo $returnMessage;
+	
+	///////////////////////////////
+	//// check for duplicates and erros
+	
+	if(isset($twitterResponse->errors[0])){
+		$returnMessage = $returnMessage . " " . $twitterResponse->errors[0]->message;
+	}
+	
 	if(sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn)){
 		//echo "<br />sent";
 	}else{
