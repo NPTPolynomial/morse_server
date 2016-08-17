@@ -422,33 +422,35 @@ function codeMsgToMorseLanguageTwitterSuitable($codeMsg, $node, $WIFI_LEVEL){
 	
 	$node_name = strtoupper($node);
 	if($node_name == "Y"){
-		$node_name = "Y (Yellow)";
+		$node_name_color = "Y (Yellow)";
 	}else if($node_name == "R"){
-		$node_name = "R (Red)";
+		$node_name_color = "R (Red)";
 	}else if($node_name == "B"){
-		$node_name = "B (Blue)";
+		$node_name_color = "B (Blue)";
+	}else{
+		$node_name_color = $node_name;
 	}
 	
 	if($codeMsg == "I,0,0"){
-		$returnString = "CQ DE $node_name, K - calling anyone this is $node_name, listening for any response";
+		$returnString = "CQ DE $node_name, K - calling anyone this is $node_name_color, listening for any response";
 	}elseif($codeMsg == "W,0,0"){
-		$returnString = "CUS DE $node_name, K - calling us this is $node_name, listening for any response";
+		$returnString = "CUS DE $node_name, K - calling us this is $node_name_color, listening for any response";
 	}elseif($codeMsg == "A,0,0" || $codeMsg == "A,1,0" || $codeMsg == "A,2,0" || $codeMsg == "A,2,1"){
-		$returnString = "CGRP DE $node_name, K - calling group this is $node_name, listening for any response";
+		$returnString = "CGRP DE $node_name, K - calling group this is $node_name_color, listening for any response";
 	}elseif($codeMsg == "S,1,0"){
-		$returnString = "CGRP DE $node_name PRSNT? K - calling group this is $node_name, are you present? listening for any response";
+		$returnString = "CGRP DE $node_name PRSNT? K - calling group this is $node_name_color, are you present? listening for any response";
 	}elseif($codeMsg == "T,2,0" || $codeMsg == "T,2,1"){
 		
 		if($WIFI_LEVEL == 'low'){
-			$returnString = "CGRP DE $node_name SIG 1 SRI K - calling group this is $node_name my signal is weak, sorry. listening for any response";
+			$returnString = "CGRP DE $node_name SIG 1 SRI K - calling group this is $node_name_color my signal is weak, sorry. listening for any response";
 		}else if($WIFI_LEVEL == 'med'){
-			$returnString = "CGRP DE $node_name SIG 2 TKS K - calling group this is $node_name my signal is ok, thank you. listening for any response";
+			$returnString = "CGRP DE $node_name SIG 2 TKS K - calling group this is $node_name_color my signal is ok, thank you. listening for any response";
 		}else if($WIFI_LEVEL == 'high'){
-			$returnString = "CGRP DE $node_name SIG 3 TLK K - calling group this is $node_name my signal is strong, let's talk! listening for any response";
+			$returnString = "CGRP DE $node_name SIG 3 TLK K - calling group this is $node_name_color my signal is strong, let's talk! listening for any response";
 		}
 		
 	}elseif($codeMsg == "N,3,0" || $codeMsg == "N,3,1"){
-		$returnString = "CGRP DE $node_name WER NTWRK K - calling group this is $node_name we are on the network. listening for any response";
+		$returnString = "CGRP DE $node_name WER NTWRK K - calling group this is $node_name_color we are on the network. listening for any response";
 	}else{
 		$returnString = "????,".$codeMsg;
 	}
