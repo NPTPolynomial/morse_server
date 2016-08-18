@@ -422,23 +422,23 @@ function codeMsgToMorseLanguageTwitterSuitable($codeMsg, $node, $WIFI_LEVEL){
 	
 	$node_name = strtoupper($node);
 	if($node_name == "Y"){
-		$node_name_color = "Y (Yellow)";
+		$node_name_color = "Yellow";
 	}else if($node_name == "R"){
-		$node_name_color = "R (Red)";
+		$node_name_color = "Red";
 	}else if($node_name == "B"){
-		$node_name_color = "B (Blue)";
+		$node_name_color = "Blue";
 	}else{
 		$node_name_color = $node_name;
 	}
 	
 	if($codeMsg == "I,0,0"){
-		$returnString = "CQ DE $node_name, K - calling anyone this is $node_name_color, listening for any response";
+		$returnString = "CQ DE $node_name, K - calling anyone this is $node_name_color listening for any response";
 	}elseif($codeMsg == "W,0,0"){
-		$returnString = "CUS DE $node_name, K - calling us this is $node_name_color, listening for any response";
+		$returnString = "CUS DE $node_name, K - calling us this is $node_name_color listening for any response";
 	}elseif($codeMsg == "A,0,0" || $codeMsg == "A,1,0" || $codeMsg == "A,2,0" || $codeMsg == "A,2,1"){
-		$returnString = "CGRP DE $node_name, K - calling group this is $node_name_color, listening for any response";
+		$returnString = "CGRP DE $node_name, K - calling group this is $node_name_color listening for any response";
 	}elseif($codeMsg == "S,1,0"){
-		$returnString = "CGRP DE $node_name PRSNT? K - calling group this is $node_name_color, are you present? listening for any response";
+		$returnString = "CGRP DE $node_name PRSNT? K - calling group this is $node_name_color are you present? listening for any response";
 	}elseif($codeMsg == "T,2,0" || $codeMsg == "T,2,1"){
 		
 		if($WIFI_LEVEL == 'low'){
