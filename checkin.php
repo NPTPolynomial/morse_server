@@ -432,11 +432,11 @@ function codeMsgToMorseLanguageTwitterSuitable($codeMsg, $node, $WIFI_LEVEL){
 	}
 	
 	if($codeMsg == "I,0,0"){
-		$returnString = "CQ DE $node_name, K - calling anyone this is $node_name_color listening for any response";
+		$returnString = "CQ DE $node_name K - calling anyone this is $node_name_color listening for any response";
 	}elseif($codeMsg == "W,0,0"){
-		$returnString = "CUS DE $node_name, K - calling us this is $node_name_color listening for any response";
+		$returnString = "CUS DE $node_name K - calling us this is $node_name_color listening for any response";
 	}elseif($codeMsg == "A,0,0" || $codeMsg == "A,1,0" || $codeMsg == "A,2,0" || $codeMsg == "A,2,1"){
-		$returnString = "CGRP DE $node_name, K - calling group this is $node_name_color listening for any response";
+		$returnString = "CGRP DE $node_name K - calling group this is $node_name_color listening for any response";
 	}elseif($codeMsg == "S,1,0"){
 		$returnString = "CGRP DE $node_name PRSNT? K - calling group this is $node_name_color are you present? listening for any response";
 	}elseif($codeMsg == "T,2,0" || $codeMsg == "T,2,1"){
