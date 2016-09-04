@@ -422,39 +422,35 @@ function codeMsgToMorseLanguageTwitterSuitable($codeMsg, $node, $WIFI_LEVEL){
 	
 	$node_name = strtoupper($node);
 	if($node_name == "Y"){
-		$node_name = "Y (Yellow)";
+		$node_name_color = "Yellow";
 	}else if($node_name == "R"){
-		$node_name = "R (Red)";
+		$node_name_color = "Red";
 	}else if($node_name == "B"){
-		$node_name = "B (Blue)";
+		$node_name_color = "Blue";
+	}else{
+		$node_name_color = $node_name;
 	}
 	
 	if($codeMsg == "I,0,0"){
-		$returnString = "CQ (calling anyone) DE (this is) $node_name, K (listening for any response)";
+		$returnString = "CQ DE $node_name K - calling anyone this is $node_name_color listening for any response";
 	}elseif($codeMsg == "W,0,0"){
-		$returnString = "CUS (calling us) DE (this is) $node_name, K (listening for any response)";
-	}elseif($codeMsg == "A,0,0"){
-		$returnString = "CGRP (calling group) DE (this is) $node_name, K (listening for any response)";
-	}elseif($codeMsg == "A,1,0"){
-		$returnString = "CGRP (calling group) DE (this is) $node_name K (listening for any response)";
-	}elseif($codeMsg == "A,2,0"){
-		$returnString = "CGRP (calling group) DE (this is) $node_name K (listening for any response)";
-	}elseif($codeMsg == "A,2,1"){
-		$returnString = "CGRP (calling group) DE (this is) $node_name K (listening for any response)";
+		$returnString = "CUS DE $node_name K - calling us this is $node_name_color listening for any response";
+	}elseif($codeMsg == "A,0,0" || $codeMsg == "A,1,0" || $codeMsg == "A,2,0" || $codeMsg == "A,2,1"){
+		$returnString = "CGRP DE $node_name K - calling group this is $node_name_color listening for any response";
 	}elseif($codeMsg == "S,1,0"){
-		$returnString = "CGRP (calling group) DE (this is) $node_name PRSNT? K (listening for any response)";
+		$returnString = "CGRP DE $node_name PRSNT? K - calling group this is $node_name_color are you present? listening for any response";
 	}elseif($codeMsg == "T,2,0" || $codeMsg == "T,2,1"){
 		
 		if($WIFI_LEVEL == 'low'){
-			$returnString = "CGRP (calling group) DE (this is) $node_name SIG (my signal is ) 1 (weak) SRI (sorry) K (listening for any response)";
+			$returnString = "CGRP DE $node_name SIG 1 SRI K - calling group this is $node_name_color my signal is weak, sorry. listening for any response";
 		}else if($WIFI_LEVEL == 'med'){
-			$returnString = "CGRP (calling group) DE (this is) $node_name SIG (my signal is ) 2 (ok) TKS (thank you) K (listening for any response)";
+			$returnString = "CGRP DE $node_name SIG 2 TKS K - calling group this is $node_name_color my signal is ok, thank you. listening for any response";
 		}else if($WIFI_LEVEL == 'high'){
-			$returnString = "CGRP (calling group) DE (this is) $node_name SIG (my signal is ) 3 (strong) TLK (let's talk) K (listening for any response)";
+			$returnString = "CGRP DE $node_name SIG 3 TLK K - calling group this is $node_name_color my signal is strong, let's talk! listening for any response";
 		}
 		
 	}elseif($codeMsg == "N,3,0" || $codeMsg == "N,3,1"){
-		$returnString = "CGRP (calling group) DE (this is) $node_name WER (we are) NTWRK (on the network) K (listening for any response)";
+		$returnString = "CGRP DE $node_name WER NTWRK K - calling group this is $node_name_color we are on the network. listening for any response";
 	}else{
 		$returnString = "????,".$codeMsg;
 	}
@@ -607,10 +603,22 @@ if($node && $node->group){
 	/////////////////
 	//Post to twitter:
 	//
-	$twitter->post('statuses/update', array('status' => $twitterSuitableMsg));
+	$twitterResponse = $twitter->post('statuses/update', array('status' => $twitterSuitableMsg));
+	
+//	var_dump($twitterResponse);
+
+//	print_r($twitterResponse);
 	
 	
 	echo $returnMessage;
+	
+	///////////////////////////////
+	//// check for duplicates and erros
+	
+	if(isset($twitterResponse->errors[0])){
+		$returnMessage = $returnMessage . " " . $twitterResponse->errors[0]->message;
+	}
+	
 	if(sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn)){
 		//echo "<br />sent";
 	}else{
