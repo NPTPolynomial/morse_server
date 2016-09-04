@@ -16,53 +16,52 @@ void setup() {
   pinMode(vccPin, OUTPUT); // initialize vcc pin for mosfet
   pinMode(signalPin, INPUT);// initialize singalPin for taking in signal from a source
 
-  //Power down various bits of hardware to lower power usage  
+  //Power down various bits of hardware to lower power usage
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); //Power down everything, wake up from WDT
   sleep_enable();
-  ADCSRA &= ~(1<<ADEN); //Disable ADC, saves ~230uA
-  
-  setup_watchdog(3); //Wake up after 128 msec
+  ADCSRA &= ~(1 << ADEN); //Disable ADC, saves ~230uA
 
+  setup_watchdog(3); //Wake up after 128 msec
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
-  ADCSRA |= (1<<ADEN); //Enable ADC
-  
-    watchdog_counter = 0;
-    wdt_disable(); //Turn off the WDT!!
+
+  ADCSRA |= (1 << ADEN); //Enable ADC
+
+  watchdog_counter = 0;
+  wdt_disable(); //Turn off the WDT!!
+  digitalWrite(vccPin, HIGH);
+
+  long startTime = millis(); //Record the current time
+  long timeSinceBlink = millis(); //Record the current time for blinking
+
+  //Loop 20 seconds of have completed
+  while ((millis() - startTime) < 100) {
     digitalWrite(vccPin, HIGH);
-    
-    long startTime = millis(); //Record the current time
-    long timeSinceBlink = millis(); //Record the current time for blinking
-    
-    //Loop 20 seconds of have completed
-    while((millis() - startTime) < 100){
-      digitalWrite(vccPin, HIGH);
-    }
-    
-    //wdt_enable(WDTO_4S);
-    
-  
-  if(digitalRead(signalPin) == HIGH)
+  }
+
+  //wdt_enable(WDTO_4S);
+
+
+  if (digitalRead(signalPin) == HIGH)
   {
     // 1 to 1.12423
     // 562.85/500  = 1.1257
     // 4176.57 / 3600  = 1.160158
     // 4057    / 3600  = 1.12694  mistake?
     // 4075    / 3600  = 1.131944444    (database)
-    // 7182.45 / 6372  = 1.127189266    
-    // 1.127963863   (Server based BEST number) 
-//    unsigned int ran = random(3, 19+1);  // 3 - 22 seconds in real world 
+    // 7182.45 / 6372  = 1.127189266
+    // 1.127963863   (Server based BEST number)
+    //    unsigned int ran = random(3, 19+1);  // 3 - 22 seconds in real world
 
-    unsigned int ran = random(4771.429454917, 26580.638780624);  // 3 - 22 seconds in real world 
-    
-    for(unsigned int i =0; i < ran; i++){ 
-    ADCSRA &= ~(1<<ADEN); //Disable ADC, saves ~230uA
-    setup_watchdog(6); //Setup watchdog to go off after 1sec
-    sleep_mode(); //Go to sleep! Wake up 1sec   later and check water
-    digitalWrite(vccPin, LOW);
+    unsigned int ran = random(4771, 26581);
+
+    for (unsigned int i = 0; i < ran; i++) {
+      ADCSRA &= ~(1 << ADEN); //Disable ADC, saves ~230uA
+      setup_watchdog(6); //Setup watchdog to go off after 1sec
+      sleep_mode(); //Go to sleep! Wake up 1sec   later and check water
+      digitalWrite(vccPin, LOW);
     }
   }
 
@@ -76,12 +75,12 @@ void setup_watchdog(int timerPrescaler) {
 
   if (timerPrescaler > 9 ) timerPrescaler = 9; //Correct incoming amount if need be
 
-  byte bb = timerPrescaler & 7; 
-  if (timerPrescaler > 7) bb |= (1<<5); //Set the special 5th bit if necessary
+  byte bb = timerPrescaler & 7;
+  if (timerPrescaler > 7) bb |= (1 << 5); //Set the special 5th bit if necessary
 
   //This order of commands is important and cannot be combined
-  MCUSR &= ~(1<<WDRF); //Clear the watch dog reset
-  WDTCSR |= (1<<WDCE) | (1<<WDE); //Set WD_change enable, set WD enable
+  MCUSR &= ~(1 << WDRF); //Clear the watch dog reset
+  WDTCSR |= (1 << WDCE) | (1 << WDE); //Set WD_change enable, set WD enable
   WDTCSR = bb; //Set new watchdog timeout value
   WDTCSR |= _BV(WDIE); //Set the interrupt enable, this will keep unit from resetting after each int
 }

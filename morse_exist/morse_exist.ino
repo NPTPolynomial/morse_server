@@ -109,7 +109,7 @@ void setup() {
 //  digitalWrite(speakerPin, HIGH); // BOWL
 
   delay(1000);
-  WiFiMulti.addAP("eds2g", "DesignStudio2016");
+  WiFiMulti.addAP("MorseThings", "DesignStudio2016");
   //  WiFiMulti.addAP("Eds-Studio-2ghz", "DesignStudio2015");
   //  WiFiMulti.addAP("MORSE_AP", "morseesp8266");
 
@@ -181,6 +181,9 @@ void loop() {
     USE_SERIAL.println("Counter reset");
     USE_SERIAL.println(counter);
     counter = 0;
+
+    // TODO: no WIFI connection
+    talk("sos");
     digitalWrite(toATtiny, HIGH);
   }
   delay(1500);
