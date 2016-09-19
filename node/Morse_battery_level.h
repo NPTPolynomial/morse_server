@@ -1,4 +1,4 @@
-void battery_level() {
+int battery_level() {
  
   // read the battery level from the ESP8266 analog in pin.
   // analog read level is 10 bit 0-1023 (0V-1V).
@@ -7,9 +7,13 @@ void battery_level() {
   // this means our min analog read value should be 580 (3.14V)
   // and the max analog read value should be 774 (4.2V).
   int level = analogRead(A0);
+  Serial.println("voltage in analog read: ");
+  Serial.println(level);
+  Serial.println();
  
   // convert battery level to percent
-  level = map(level, 580, 774, 0, 100);
+  level = map(level, 0, 1024, 0, 100);
   Serial.print("Battery level: "); Serial.print(level); Serial.println("%");
+  return level;
   
 }

@@ -32,6 +32,7 @@ void setup() {
 
   didITalked = false;
   pinMode(toATtiny, OUTPUT);
+  pinMode(A0, INPUT);
 
   USE_SERIAL.begin(115200);
   // USE_SERIAL.setDebugOutput(true);
@@ -64,8 +65,9 @@ void loop() {
     HTTPClient http;
 
     USE_SERIAL.print("[HTTP] begin...\n");
+    
 
-    http.begin(SERVER_URL, 80, "/morse_server/checkin.php?node=" + NODE_NAME + "&group=" + GROUP + "&wifi_sig=" + String(test.RSSI())); //HTTP
+    http.begin(SERVER_URL, 80, "/morse_server/checkin.php?node=" + NODE_NAME + "&group=" + GROUP + "&wifi_sig=" + String(test.RSSI()) + "&bat=" + battery_level() ); //HTTP
 
     USE_SERIAL.print("[HTTP] GET...\n");
     
@@ -126,7 +128,9 @@ void loop() {
     
   }
 
-  battery_level();
+  delay(100);
+
+  
 
 
 

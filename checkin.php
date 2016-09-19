@@ -70,6 +70,11 @@ if(isset($_GET["node"])){
 	if($DEBUG) echo "No node set..";
 }
 
+if(isset($_GET["bat"])){
+    $battery_level = $_GET["bat"]; 
+}else{
+    $battery_level = -9999;
+}
 
 
 //wifi 20max, 40min
@@ -516,7 +521,7 @@ function sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn){
 	//echo "setGlobalVar($var, $value).... <br />";
 	$currentT = $currentTimeNow->format('Y-m-d H:i:s');
 	
-	$sendMessageToBoardQuery = "INSERT INTO `morse`.`board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`, `network`) VALUES ('$currentT', NULL, '$node', 'ALL', '$returnMessage', '0', '0', '0', '$node->group');";
+	$sendMessageToBoardQuery = "INSERT INTO `morse`.`board` (`datetime`, `board_id`, `from`, `to`, `type`, `dial_id`, `end`, `count`, `network`, `battery_level`) VALUES ('$currentT', NULL, '$node', 'ALL', '$returnMessage', '0', '0', '0', '$node->group', '$battery_level');";
 								
 	
 	$sendMessageToBoard = mysqli_query($conn, $sendMessageToBoardQuery);
