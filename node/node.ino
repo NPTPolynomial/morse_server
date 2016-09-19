@@ -17,10 +17,8 @@ int toATtiny = 12;
 
 
 boolean didITalked = false;
-int counter;
 const int minProtectionTime = 15000; // 1500 delay * 10 seconds
 unsigned long prevMillis = 0;
-const int sleepTimeS = 10;
 
 
 ESP8266WiFiMulti WiFiMulti;
@@ -33,7 +31,6 @@ ESP8266WiFiClass test;
 void setup() {
 
   didITalked = false;
-  counter = 0;
   pinMode(toATtiny, OUTPUT);
 
   USE_SERIAL.begin(115200);
