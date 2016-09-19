@@ -516,7 +516,7 @@ function messageToString($codeMsg, $node ,$WIFI_LEVEL){
 
 
 //SENDS returnmessage to the autoupdating board
-function sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn){
+function sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn, $battery_level){
 	
 	//echo "setGlobalVar($var, $value).... <br />";
 	$currentT = $currentTimeNow->format('Y-m-d H:i:s');
@@ -624,7 +624,7 @@ if($node && $node->group){
 		$returnMessage = $returnMessage . " " . $twitterResponse->errors[0]->message;
 	}
 	
-	if(sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn)){
+	if(sendMessageToBoard($returnMessage, $currentTimeNow, $node, $conn, $battery_level)){
 		//echo "<br />sent";
 	}else{
 		//echo "<br />notsent";
