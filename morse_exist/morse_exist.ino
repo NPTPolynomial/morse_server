@@ -78,7 +78,7 @@ String SERVER_URL = "morsethings.siat.sfu.ca";
 //int unusedPin = 50;
 
 String NODE_NAME = "b";
-int GROUP = 1;
+int GROUP = 99;
 
 int counter;
 const int minProtectionTime = 15000; // 1500 delay * 10 seconds
@@ -89,6 +89,139 @@ ESP8266WiFiClass test;
 unsigned long prevMillis = 0;
 
 const int sleepTimeS = 10;
+
+
+
+
+void string_to_char() {
+
+  str.toCharArray(charBuf, buffer_length);
+
+  for (int i = 0; i < buffer_length; i++) {
+    Serial.print(charBuf[i]);
+    Serial.print("\t");
+  }
+  Serial.println();
+  Serial.println();
+  delay(100);
+
+}
+
+
+
+void char_to_int() {
+  //a char to a ASCII = 97 -> a==0
+
+  for (int i = 0; i < buffer_length; i++) {
+    intBuf[i] = (int)charBuf[i];
+    Serial.print(intBuf[i]);
+    Serial.print("\t");
+  }
+  Serial.println();
+  Serial.println();
+
+}
+
+
+void silence(int i) {
+  //wait a while.
+  //play a short pulse
+ 
+
+  digitalWrite(speakerPin, LOW);  //CUP
+//  digitalWrite(speakerPin, HIGH);  // BOWL
+  delay(bpm*i);
+}
+
+
+
+
+
+
+void di() {
+  //play a short pulse
+  
+  digitalWrite(speakerPin, HIGH);  // CUP
+//  digitalWrite(speakerPin, LOW);  // BOWL
+  delay(bpm);
+}
+
+void dah() {
+  //play a long pulse
+  digitalWrite(speakerPin, HIGH);  // CUP
+//  digitalWrite(speakerPin, LOW);  // BOWL
+  delay(bpm*3);
+}
+
+
+
+void morse_to_sound(int q) {
+
+  //run through the digits of a character within the morse alphabet
+  for (int i = 0; i < character_length; i++) {
+    int y;
+    alphabet_substr = alphabet[q].substring(i, i + 1);  //get the digit
+    y = alphabet_substr.toInt(); //store the digit into an int for comparision.
+
+    /* WHAT y MEANS:
+     * 0 = _ (single silence)
+     * 1 = di (1 time note)
+     * 2 = daaah (3 times the length of di)
+     * 3 = end of character (2 times silence)
+     * 4 = end of word (3 times silence)
+     */
+
+    if (y == 3) {
+      //end of the current character
+      silence(2);
+      break;
+    }
+
+    if (y == 1) {
+      di();
+      silence(1);
+    }
+
+    if (y == 2) {
+      dah();
+      silence(1);
+    }
+
+  }
+}
+
+void int_to_morse() {
+
+  for (int i = 0; i < buffer_length; i++) {
+    //0 is end of the sentence
+    if (intBuf[i] == 0) {
+      Serial.print(" || ");
+      break;
+    }
+    if (intBuf[i] == space_char) {
+      Serial.print(" / ");
+      silence(4);
+    }
+    else if (intBuf[i] == question_char) {
+      Serial.print(" ? ");
+      morse_to_sound(26);
+    }
+    else {
+      Serial.print(".");
+      Serial.print(intBuf[i] - ASCIIconv);
+      morse_to_sound((intBuf[i] - ASCIIconv));
+    }
+  }
+
+}
+
+void talk(String q) {
+  str = q;
+  string_to_char();
+  char_to_int();
+  int_to_morse();
+}
+
 
 void setup() {
 
@@ -192,128 +325,4 @@ void loop() {
   
 }
 
-void string_to_char() {
-
-  str.toCharArray(charBuf, buffer_length);
-
-  for (int i = 0; i < buffer_length; i++) {
-    Serial.print(charBuf[i]);
-    Serial.print("\t");
-  }
-  Serial.println();
-  Serial.println();
-  delay(100);
-
-}
-
-
-
-void char_to_int() {
-  //a char to a ASCII = 97 -> a==0
-
-  for (int i = 0; i < buffer_length; i++) {
-    intBuf[i] = (int)charBuf[i];
-    Serial.print(intBuf[i]);
-    Serial.print("\t");
-  }
-  Serial.println();
-  Serial.println();
-
-}
-
-
-
-void int_to_morse() {
-
-  for (int i = 0; i < buffer_length; i++) {
-    //0 is end of the sentence
-    if (intBuf[i] == 0) {
-      Serial.print(" || ");
-      break;
-    }
-    if (intBuf[i] == space_char) {
-      Serial.print(" / ");
-      silence(4);
-    }
-    else if (intBuf[i] == question_char) {
-      Serial.print(" ? ");
-      morse_to_sound(26);
-    }
-    else {
-      Serial.print(".");
-      Serial.print(intBuf[i] - ASCIIconv);
-      morse_to_sound((intBuf[i] - ASCIIconv));
-    }
-  }
-
-}
-
-
-
-void morse_to_sound(int q) {
-
-  //run through the digits of a character within the morse alphabet
-  for (int i = 0; i < character_length; i++) {
-    int y;
-    alphabet_substr = alphabet[q].substring(i, i + 1);  //get the digit
-    y = alphabet_substr.toInt(); //store the digit into an int for comparision.
-
-    /* WHAT y MEANS:
-     * 0 = _ (single silence)
-     * 1 = di (1 time note)
-     * 2 = daaah (3 times the length of di)
-     * 3 = end of character (2 times silence)
-     * 4 = end of word (3 times silence)
-     */
-
-    if (y == 3) {
-      //end of the current character
-      silence(2);
-      break;
-    }
-
-    if (y == 1) {
-      di();
-      silence(1);
-    }
-
-    if (y == 2) {
-      dah();
-      silence(1);
-    }
-
-  }
-}
-
-void talk(String q) {
-  str = q;
-  string_to_char();
-  char_to_int();
-  int_to_morse();
-}
-
-void di() {
-  //play a short pulse
-  
-  digitalWrite(speakerPin, HIGH);  // CUP
-//  digitalWrite(speakerPin, LOW);  // BOWL
-  delay(bpm);
-}
-
-void dah() {
-  //play a long pulse
-  digitalWrite(speakerPin, HIGH);  // CUP
-//  digitalWrite(speakerPin, LOW);  // BOWL
-  delay(bpm*3);
-}
-
-void silence(int i) {
-  //wait a while.
-  //play a short pulse
- 
-
-  digitalWrite(speakerPin, LOW);  //CUP
-//  digitalWrite(speakerPin, HIGH);  // BOWL
-  delay(bpm*i);
-}
 
