@@ -12,7 +12,7 @@ int battery_level() {
   Serial.println();
  
   // convert battery level to percent
-  level = map(level, 0, 1024, 0, 100);
+  level = map(level, 580, 774, 0, 100);
   Serial.print("Battery level: "); Serial.print(level); Serial.println("%");
   return level;
   

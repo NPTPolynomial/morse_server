@@ -11,8 +11,8 @@
 
 
 String SERVER_URL = "morsethings.siat.sfu.ca";
-String NODE_NAME = "b";
-int GROUP = 99;
+String NODE_NAME = "y";
+int GROUP = 2;
 int toATtiny = 12;
 
 
