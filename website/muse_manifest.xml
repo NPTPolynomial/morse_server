@@ -1,0 +1,56 @@
+<manifest alg="2" build="2015.0.2.310" opt="true" iceEnabled="true" iceMarkupVersion="2" exportTarget="other" domain="http://morsethings.siat.sfu.ca" resolutions="1x" timestamp="1473201323071">
+  <folder name="css">
+    <file name="site_global.css" crc="84303590"/>
+    <file name="master_a-master-copy.css" crc="518039663" ref="index:workshops:participants:twitterfeeds"/>
+    <file name="index.css" crc="364026145" ref="index"/>
+    <file name="workshops.css" crc="3921166247" ref="workshops"/>
+    <file name="participants.css" crc="304378190" ref="participants"/>
+    <file name="twitterfeeds.css" crc="4173594467" ref="twitterfeeds"/>
+  </folder>
+  <folder name="fonts">
+    <file name="miso-bold-webfont.woff" crc="196580671"/>
+    <file name="miso-bold-webfont.eot" crc="327524905"/>
+    <file name="miso-bold-webfont.svg" crc="532775253"/>
+  </folder>
+  <folder name="assets">
+    <file name="morse-cheat-sheet.pdf" crc="367691843" seo="true" mt="1473130220000"/>
+    <file name="morsethingsinfodocument.pdf" crc="399763068" seo="true" mt="1473199721000"/>
+    <file name="morse-cheat-sheet-v2.pdf" crc="4039022292" seo="true" mt="1473200216000"/>
+    <file name="instruction-booklet.pdf" crc="3767483030" seo="true" mt="1473199226000"/>
+  </folder>
+  <folder name="scripts">
+    <file name="jquery-1.8.3.min.js" crc="196614522" ref="index:twitterfeeds:workshops:participants"/>
+    <file name="museutils.js" crc="275725342" ref="index:twitterfeeds:workshops:participants"/>
+    <file name="jquery.watch.js" crc="3999102769" ref="index:twitterfeeds:workshops:participants"/>
+  </folder>
+  <folder name="images">
+    <file name="big bowl v2.svg" crc="4179980520" ref="index"/>
+    <file name="big bowl v2_poster_.png" crc="333718387" ref="index"/>
+    <file name="cup v2.svg" crc="446839412" ref="index"/>
+    <file name="cup v2_poster_.png" crc="3773015344" ref="index"/>
+    <file name="small bowl v2.svg" crc="433127668" ref="index"/>
+    <file name="small bowl v2_poster_.png" crc="29571477" ref="index"/>
+    <file name="eds-logo-development-06-crop-u1221.jpg" crc="162987394" ref="index:twitterfeeds:workshops:participants"/>
+    <file name="design united logo2.png" crc="212565142" seo="true" ref="index:twitterfeeds:workshops:participants"/>
+    <file name="tue-logo.svg" crc="4071517365" ref="index:twitterfeeds:workshops:participants"/>
+    <file name="tue-logo_poster_.png" crc="345863504" ref="index"/>
+    <file name="didah.svg" crc="3868482365" ref="twitterfeeds"/>
+    <file name="didah_poster_.png" crc="4177809502" ref="twitterfeeds"/>
+    <file name="dit.svg" crc="132289854" ref="twitterfeeds"/>
+    <file name="dit_poster_.png" crc="3831433631" ref="twitterfeeds"/>
+    <file name="dahdah.svg" crc="4017591521" ref="twitterfeeds"/>
+    <file name="dahdah_poster_.png" crc="284858446" ref="twitterfeeds"/>
+    <file name="dadit.svg" crc="4248188399" ref="twitterfeeds"/>
+    <file name="dadit_poster_.png" crc="362163092" ref="twitterfeeds"/>
+    <file name="dihdahdit.svg" crc="19366568" ref="twitterfeeds"/>
+    <file name="dihdahdit_poster_.png" crc="217178055" ref="twitterfeeds"/>
+    <file name="didit.svg" crc="306913715" ref="twitterfeeds"/>
+    <file name="didit_poster_.png" crc="3768470506" ref="twitterfeeds"/>
+    <file name="morse header logo.svg" crc="3946554438" ref="workshops"/>
+    <file name="morse header logo_poster_.png" crc="447713311" ref="workshops"/>
+  </folder>
+  <file name="index.html" crc="432296541" seo="true" mt="1473201221681" redirect="true"/>
+  <file name="twitterfeeds.html" crc="491522000" seo="true" mt="1473201294100" redirect="true"/>
+  <file name="workshops.html" crc="292755593" seo="true" mt="1473201221681" redirect="true"/>
+  <file name="participants.html" crc="3780363316" seo="true" mt="1473201221681" redirect="true"/>
+</manifest>

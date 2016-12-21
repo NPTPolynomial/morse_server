@@ -1,0 +1,295 @@
+/*
+
+*/
+
+.version.participants /* version checker */
+{
+	color: #000012;
+	background-color: #24714E;
+}
+
+.html
+{
+	background-color: #FFFFFF;
+}
+
+#page
+{
+	z-index: 1;
+	width: 960px;
+	min-height: 923px;
+	background-image: none;
+	border-style: none;
+	border-color: #000000;
+	background-color: transparent;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#page_position_content
+{
+	margin-top: -36px;
+	padding-bottom: 1px;
+	width: 0.01px;
+}
+
+#pu1441
+{
+	width: 0.01px;
+	padding-bottom: 65px;
+	margin-left: -100px;
+}
+
+#u1441
+{
+	z-index: 73;
+	height: 65px;
+	background-color: #FFFFFF;
+	position: fixed;
+	top: 0px;
+}
+
+#u1441-bw
+{
+	z-index: 73;
+}
+
+#u1443
+{
+	z-index: 88;
+	height: 65px;
+	top: 0px;
+}
+
+#u1443-bw
+{
+	z-index: 88;
+}
+
+#u1444-14
+{
+	z-index: 89;
+	width: 461px;
+	min-height: 29px;
+	top: 29px;
+	left: 50%;
+	margin-left: 34px;
+}
+
+#u1442-14
+{
+	z-index: 74;
+	width: 461px;
+	min-height: 29px;
+	background-color: transparent;
+	line-height: 17px;
+	position: fixed;
+	top: 29px;
+	left: 50%;
+	margin-left: 119px;
+}
+
+#u1412
+{
+	z-index: 33;
+	min-height: 632.6500000000001px;
+	background-color: #E6E7E8;
+	padding-bottom: 0px;
+}
+
+#u1412_align_to_page
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 960px;
+	position: relative;
+	left: -100px;
+	padding-top: 86px;
+	padding-bottom: 93px;
+}
+
+#u1409-15
+{
+	z-index: 34;
+	width: 463px;
+	min-height: 96px;
+	background-color: transparent;
+	line-height: 120px;
+	font-size: 100px;
+	text-align: left;
+	font-family: '__Miso_3';
+	font-weight: 700;
+	left: 614px;
+	position: relative;
+}
+
+#u1409-4,#u1409-7,#u1409-10
+{
+	color: #EEBA00;
+}
+
+#u1409,#u1409-3,#u1409-6,#u1409-8,#u1409-11
+{
+	color: #EC6552;
+}
+
+#u1409-2,#u1409-5,#u1409-9,#u1409-12
+{
+	color: #205479;
+}
+
+#u1427-4
+{
+	z-index: 49;
+	width: 293px;
+	min-height: 55px;
+	background-color: transparent;
+	line-height: 17px;
+	left: 614px;
+	margin-top: 42px;
+	position: relative;
+}
+
+#u1428-20
+{
+	z-index: 53;
+	width: 293px;
+	min-height: 55px;
+	background-color: transparent;
+	line-height: 17px;
+	left: 614px;
+	margin-top: 32px;
+	position: relative;
+}
+
+#u1412-bw
+{
+	z-index: 33;
+	min-height: 632.6500000000001px;
+}
+
+#u1405
+{
+	z-index: 32;
+	height: 4px;
+}
+
+#u1405-bw
+{
+	z-index: 32;
+	margin-top: -1px;
+	margin-bottom: -1px;
+	height: 4px;
+}
+
+#u1220
+{
+	z-index: 2;
+	min-height: 234px;
+	padding-bottom: 61px;
+}
+
+#u1220_align_to_page
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 960px;
+	left: -100px;
+}
+
+#pu1231-13
+{
+	width: 0.01px;
+	padding-bottom: 0px;
+	margin-right: -10000px;
+	margin-top: 40px;
+	margin-left: 253px;
+}
+
+#u1231-13
+{
+	z-index: 18;
+	width: 282px;
+	min-height: 54px;
+}
+
+#u1221
+{
+	z-index: 3;
+	width: 110px;
+	margin-top: 29px;
+}
+
+#u1232
+{
+	z-index: 31;
+	width: 1px;
+	height: 194px;
+	margin-right: -10000px;
+	margin-top: 40px;
+	left: 569px;
+}
+
+#pu1230-10
+{
+	width: 0.01px;
+	margin-right: -10000px;
+	margin-top: 91px;
+	margin-left: 604px;
+}
+
+#u1230-10
+{
+	z-index: 8;
+	width: 303px;
+}
+
+#pu1225
+{
+	width: 0.01px;
+	margin-top: 17px;
+}
+
+#u1225
+{
+	z-index: 6;
+	width: 132px;
+	margin-right: -10000px;
+	margin-top: 19px;
+}
+
+#u1223
+{
+	z-index: 5;
+	margin-right: -10000px;
+	left: 196px;
+}
+
+#u1220-bw
+{
+	z-index: 2;
+	min-height: 234px;
+	margin-top: 29px;
+}
+
+@font-face
+{
+	font-family: '__Miso_3';
+	src: url('../fonts/miso-bold-webfont.eot');
+	src: local('☺'), url('../fonts/miso-bold-webfont.woff') format('woff'), url('../fonts/miso-bold-webfont.svg') format('svg');
+	font-weight: 700;
+	font-style: normal;
+}
+
+body
+{
+	position: relative;
+	min-width: 960px;
+	padding-top: 36px;
+}
+
+#page .verticalspacer
+{
+	clear: both;
+}
+
